@@ -170,6 +170,8 @@ body:after{content:"";position:fixed;z-index:-1;pointer-events:none;inset:-20%;b
  #metrics .metric .draw-number strong{animation:none!important}
 }
 
+/* V8.2: portalled calendar floats above every animated app panel. */
+body > .mp-calendar{position:fixed!important;z-index:2147483000!important;transform:none!important;pointer-events:auto!important;isolation:isolate;}
 </style></head><body>
 <header><div class="top"><div class="brand mp-centered-brand"><span class="logo">✦</span><div class="mp-brand-copy"><span class="mp-main-title">MP Checklist</span><span class="mp-company-track"><small>Malik Polychem Private Limited</small></span></div></div><div class="topright"><span class="pulse"></span><span class="who" id="identity">Secure workspace</span><button class="btn outline small hidden" id="signout" style="color:white;border-color:#ffffff55" onclick="logout()">Sign out</button></div></div></header>
 <div id="auth" class="authpage"><div class="panel authbox"><h1>Welcome back</h1><p class="muted">Sign in with your registered email or mobile number and password.</p>
@@ -250,11 +252,34 @@ function isoDate(v){const x=String(v||'').trim();if(!x)return '';let m=x.match(/
 function formDate(id){const t=$(id);const v=isoDate(t.value);if(!v)throw new Error('Please select a date.');return v}
 let activeCalendar=null;
 function closeCalendar(){if(activeCalendar){activeCalendar.remove();activeCalendar=null}}
-function openCalendar(input){closeCalendar();let date;try{date=isoDate(input.value)}catch(e){}date=date||new Date().toISOString().slice(0,10);let [year,month]=date.split('-').map(Number);const pop=document.createElement('div');pop.className='mp-calendar';pop.setAttribute('role','dialog');pop.setAttribute('aria-label','Select date');pop.tabIndex=-1;input.closest('.date-enhanced').append(pop);activeCalendar=pop;
+function openCalendar(input){closeCalendar();let date;try{date=isoDate(input.value)}catch(e){}date=date||new Date().toISOString().slice(0,10);let [year,month]=date.split('-').map(Number);const pop=document.createElement('div');pop.className='mp-calendar';pop.setAttribute('role','dialog');pop.setAttribute('aria-label','Select date');pop.tabIndex=-1;// Render outside animated panels so their stacking contexts cannot cover the picker.
+ const anchor=input.closest('.date-enhanced');
+ pop._dateAnchor=anchor;
+ document.body.append(pop);
+ pop.style.position='fixed';
+ pop.style.zIndex='2147483000';
+ pop.style.margin='0';
+ pop.style.maxHeight='min(440px, calc(100dvh - 16px))';
+ pop.style.overflowY='auto';
+ function positionCalendar(){
+   if(!pop.isConnected)return;
+   const r=anchor.getBoundingClientRect();
+   const viewportW=document.documentElement.clientWidth;
+   const width=Math.min(320,viewportW-16);
+   pop.style.width=width+'px';
+   pop.style.left=Math.max(8,Math.min(r.left,viewportW-width-8))+'px';
+   const desiredHeight=Math.min(pop.scrollHeight,440,window.innerHeight-16);
+   const below=window.innerHeight-r.bottom-8;
+   const above=r.top-8;
+   const openAbove=below<Math.min(desiredHeight,300)&&above>below;
+   pop.style.top=Math.max(8,openAbove?r.top-desiredHeight-6:r.bottom+6)+'px';
+ }
+ pop._positionCalendar=positionCalendar;
+ activeCalendar=pop;
  function draw(){const first=new Date(year,month-1,1).getDay(),days=new Date(year,month,0).getDate(),chosen=(()=>{try{return isoDate(input.value)}catch(e){return ''}})(),today=new Date();const todayISO=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;pop.innerHTML=`<div class="mp-cal-head"><button type="button" data-prev aria-label="Previous month">‹</button><strong>${new Intl.DateTimeFormat('en-GB',{month:'long',year:'numeric'}).format(new Date(year,month-1,1))}</strong><button type="button" data-next aria-label="Next month">›</button></div><div class="mp-cal-grid">${['Su','Mo','Tu','We','Th','Fr','Sa'].map(x=>`<span class="mp-cal-dayname">${x}</span>`).join('')}${Array.from({length:first},()=>'<span></span>').join('')}${Array.from({length:days},(_,i)=>{const iso=`${year}-${String(month).padStart(2,'0')}-${String(i+1).padStart(2,'0')}`;return `<button type="button" data-date="${iso}" class="${iso===chosen?'chosen ':''}${iso===todayISO?'today':''}">${i+1}</button>`}).join('')}</div><div class="mp-cal-foot"><button type="button" data-today>Today</button><button type="button" data-clear>Clear</button></div>`;
  pop.querySelector('[data-prev]').onclick=()=>{month--;if(month<1){month=12;year--}draw()};pop.querySelector('[data-next]').onclick=()=>{month++;if(month>12){month=1;year++}draw()};pop.querySelectorAll('[data-date]').forEach(b=>b.onclick=()=>{input.value=displayDate(b.dataset.date);input.dispatchEvent(new Event('change'));closeCalendar()});pop.querySelector('[data-today]').onclick=()=>{input.value=displayDate(todayISO);input.dispatchEvent(new Event('change'));closeCalendar()};pop.querySelector('[data-clear]').onclick=()=>{input.value='';input.dispatchEvent(new Event('change'));closeCalendar()}}
- draw();pop.focus();}
-function enhanceDateInputs(){document.querySelectorAll('input[type="date"]').forEach(inp=>{const wrap=document.createElement('div');wrap.className='date-enhanced';inp.parentNode.insertBefore(wrap,inp);const text=document.createElement('input');text.type='text';text.id=inp.id;text.placeholder='DD-MM-YYYY';text.inputMode='numeric';text.autocomplete='off';text.setAttribute('aria-label','Date in DD-MM-YYYY format');text.value=inp.value?displayDate(inp.value):'';const btn=document.createElement('button');btn.type='button';btn.className='calendar-pick';btn.textContent='▦';btn.title='Choose date';btn.setAttribute('aria-label','Choose date');inp.remove();wrap.append(text,btn);btn.addEventListener('click',e=>{e.stopPropagation();openCalendar(text)});text.addEventListener('focus',()=>{if(!activeCalendar)openCalendar(text)});text.addEventListener('blur',()=>{if(!text.value)return;try{text.value=displayDate(isoDate(text.value));text.setCustomValidity('')}catch(e){text.setCustomValidity(e.message)}});text.addEventListener('input',()=>text.setCustomValidity(''));});document.addEventListener('pointerdown',e=>{if(activeCalendar&&!activeCalendar.parentNode.contains(e.target))closeCalendar()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCalendar()});}
+ draw();pop._positionCalendar();pop.focus();}
+function enhanceDateInputs(){document.querySelectorAll('input[type="date"]').forEach(inp=>{const wrap=document.createElement('div');wrap.className='date-enhanced';inp.parentNode.insertBefore(wrap,inp);const text=document.createElement('input');text.type='text';text.id=inp.id;text.placeholder='DD-MM-YYYY';text.inputMode='numeric';text.autocomplete='off';text.setAttribute('aria-label','Date in DD-MM-YYYY format');text.value=inp.value?displayDate(inp.value):'';const btn=document.createElement('button');btn.type='button';btn.className='calendar-pick';btn.textContent='▦';btn.title='Choose date';btn.setAttribute('aria-label','Choose date');inp.remove();wrap.append(text,btn);btn.addEventListener('click',e=>{e.stopPropagation();openCalendar(text)});text.addEventListener('focus',()=>{if(!activeCalendar)openCalendar(text)});text.addEventListener('blur',()=>{if(!text.value)return;try{text.value=displayDate(isoDate(text.value));text.setCustomValidity('')}catch(e){text.setCustomValidity(e.message)}});text.addEventListener('input',()=>text.setCustomValidity(''));});document.addEventListener('pointerdown',e=>{if(activeCalendar&&!activeCalendar.contains(e.target)&&!activeCalendar._dateAnchor?.contains(e.target))closeCalendar()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCalendar()});window.addEventListener('resize',()=>activeCalendar?._positionCalendar?.());window.addEventListener('scroll',()=>activeCalendar?._positionCalendar?.(),true);}
 function toast(message,bad=false){const host=$('toastStack');if(!host)return;const d=document.createElement('div');d.className='toast-item'+(bad?' bad':'');d.textContent=message;host.append(d);setTimeout(()=>{d.style.opacity='0';d.style.transform='translateX(30px)';setTimeout(()=>d.remove(),300)},3600)}
 function animateCount(node,end){const n=Number(end);if(!Number.isFinite(n)||matchMedia('(prefers-reduced-motion: reduce)').matches){node.textContent=end;return}const started=performance.now(),duration=650;function frame(now){const t=Math.min(1,(now-started)/duration),e=1-Math.pow(1-t,4);node.textContent=Math.round(n*e).toLocaleString('en-IN');if(t<1&&node.isConnected)requestAnimationFrame(frame)}requestAnimationFrame(frame)}
 function show(id,on=true){$(id).classList.toggle('hidden',!on)}function htmlSafe(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
