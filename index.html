@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><base target="_top"><meta name="viewport" content="width=device-width, initial-scale=1"><title>MP Checklist</title>
+<!DOCTYPE html><html lang="en"><head><base target="_top"><meta name="viewport" content="width=device-width, initial-scale=1"><title>MP Checklist · Native Calendar Fix</title>
 <style>
 :root{--wine:#72072a;--wine2:#a41442;--wine3:#4d0922;--cream:#fbf7f8;--ink:#321c27;--muted:#806c75;--line:#eadce1;--shadow:0 15px 50px #5b0b2811;font:14px/1.5 Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:var(--ink)}*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#fff9fb,#fbf7f8 55%,#f8e9ef);min-height:100vh}button,input,textarea,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cursor:wait}header{background:linear-gradient(115deg,var(--wine3),var(--wine),#95113a);color:#fff;box-shadow:0 10px 30px #56082432;position:sticky;top:0;z-index:5}.top{max-width:1380px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:15px 24px;gap:12px}.brand{font-weight:850;font-size:21px;display:flex;align-items:center;gap:10px}.brand span.logo{width:35px;height:35px;display:grid;place-items:center;background:#ffffff28;border:1px solid #ffffff55;border-radius:12px;animation:floaty 5s ease-in-out infinite}.brand small{display:block;font-size:10px;letter-spacing:.18em;opacity:.72;font-weight:600}.topright{display:flex;align-items:center;gap:13px}.who{font-size:12px;opacity:.93}.shell{max-width:1380px;margin:auto;display:grid;grid-template-columns:215px 1fr;min-height:calc(100vh - 75px)}aside{border-right:1px solid var(--line);padding:24px 12px;background:#fff9fb8f}.nav{width:100%;text-align:left;border:0;background:transparent;color:var(--muted);display:flex;gap:11px;align-items:center;padding:13px 15px;border-radius:12px;margin:3px 0;font-weight:650;transition:.22s}.nav:hover{transform:translateX(4px);background:#f7e8ed;color:var(--wine)}.nav.active{color:var(--wine);background:#f5e1e8;box-shadow:inset 3px 0 var(--wine)}main{min-width:0;padding:29px 30px 70px}.headline{font-size:27px;letter-spacing:-.04em;margin:0;font-weight:800}.sub{color:var(--muted);margin:4px 0 24px}.panel,.metric,.task{background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:18px}.panel{padding:23px;margin:15px 0}.panel h2{font-size:18px;margin:0 0 8px}h3{font-size:15px}.muted{color:var(--muted)}.tiny{font-size:12px}.metrics{display:grid;grid-template-columns:repeat(5,minmax(135px,1fr));gap:12px}.metric{padding:17px;position:relative;overflow:hidden;transition:transform .2s}.metric:hover{transform:translateY(-4px)}.metric .symbol{font-size:22px;color:var(--wine);animation:floaty 4s ease-in-out infinite}.metric strong{display:block;font-size:30px;margin:3px 0;font-variant-numeric:tabular-nums}.metric small{font-size:11px;color:var(--muted);font-weight:650}.metric:before{content:"";height:3px;background:linear-gradient(90deg,var(--wine),#e8abbf);position:absolute;left:0;right:0;top:0}.btn{border:0;border-radius:11px;padding:10px 16px;background:var(--wine);color:#fff;font-weight:700;transition:transform .2s,box-shadow .2s}.btn:hover{transform:translateY(-2px);box-shadow:0 8px 19px #72072a36}.btn.light{background:#f7e6ec;color:var(--wine)}.btn.outline{border:1px solid #e9becd;background:transparent;color:var(--wine)}.btn.small{padding:7px 11px;font-size:12px}.btn.danger{background:#a63247}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.tabs button{border:1px solid var(--line);color:var(--wine);background:#fff;padding:9px 14px;border-radius:11px;font-weight:650}.tabs button.sel{background:var(--wine);color:#fff;border-color:var(--wine)}.filters,.formgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.formgrid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.field{margin-bottom:15px}.field label{display:block;font-size:12px;font-weight:700;color:#5b3d4c;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;background:#fff;border:1px solid #dccbd2;border-radius:10px;padding:11px 12px;outline:none;color:var(--ink)}.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--wine2);box-shadow:0 0 0 3px #920d3919}.task{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:15px;margin:9px 0;animation:slideIn .3s both}.task strong{display:block}.task p{margin:4px 0 0;color:var(--muted);font-size:12px}.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.chip{font-size:11px;letter-spacing:.02em;padding:5px 9px;border-radius:99px;color:#76526a;background:#f4e5ea;font-weight:700}.chip.Done{background:#e5f3e9;color:#257144}.chip.Overdue{background:#fff0ea;color:#a23e21}.view{animation:fadeSlide .38s cubic-bezier(.2,.8,.3,1)}.hidden{display:none!important}.notice{border-left:3px solid var(--wine);background:#fbeaf0;padding:12px 14px;border-radius:9px;white-space:pre-wrap;margin:13px 0;color:var(--wine)}.notice.error{border-color:#ce3b46;color:#a32336;background:#fff0f1}.empty{padding:45px 12px;text-align:center;color:var(--muted)}.authbox{max-width:440px;margin:8vh auto;padding:34px}.authbox h1{font-size:26px}.authpage{max-width:900px;margin:auto}.rowbetween{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}.score{font-size:59px;font-weight:850;color:var(--wine);line-height:1.1}.scorelabel{font-size:12px;color:var(--muted)}.progress{background:#f1dce4;border-radius:30px;overflow:hidden;height:12px;margin:16px 0}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--wine),#cf4371);border-radius:30px;transition:width .75s ease}.tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:650px}th,td{text-align:left;padding:11px;border-bottom:1px solid var(--line);font-size:12px}th{color:var(--muted);background:#faf1f4}.pill{color:var(--wine);background:#f5e0e8;border-radius:99px;padding:3px 8px}.pulse{width:8px;height:8px;border-radius:50%;background:#60d0ad;display:inline-block;box-shadow:0 0 0 0 #60d0ad80;animation:pulse 2.5s infinite}.loading{opacity:.55;pointer-events:none}@keyframes fadeSlide{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes slideIn{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}}@keyframes floaty{50%{transform:translateY(-3px)}}@keyframes pulse{70%{box-shadow:0 0 0 9px #60d0ad00}}@media(max-width:1100px){.metrics{grid-template-columns:repeat(3,1fr)}}@media(max-width:850px){.shell{display:block}aside{display:flex;overflow:auto;gap:6px;padding:9px 12px;position:sticky;top:66px;z-index:4;border-bottom:1px solid var(--line);border-right:0}.nav{white-space:nowrap;width:auto;margin:0;padding:9px 12px;font-size:12px}.nav:hover{transform:none}main{padding:19px 15px}.metrics{grid-template-columns:repeat(2,1fr)}.filters,.formgrid,.formgrid.two{grid-template-columns:1fr}.who{display:none}.panel{padding:17px}}@media(max-width:500px){.top{padding:11px 13px}.brand{font-size:17px}.brand span.logo{width:29px;height:29px}.metric{padding:13px}.metric strong{font-size:26px}.task{align-items:flex-start;flex-direction:column}.headline{font-size:24px}.actions{width:100%}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
 
@@ -172,6 +172,128 @@ body:after{content:"";position:fixed;z-index:-1;pointer-events:none;inset:-20%;b
 
 /* V8.2: portalled calendar floats above every animated app panel. */
 body > .mp-calendar{position:fixed!important;z-index:2147483000!important;transform:none!important;pointer-events:auto!important;isolation:isolate;}
+
+/* V8.3: REAL MODAL TOP LAYER. showModal() renders over all animated panels,
+   regardless of stacking contexts, transforms and z-index. */
+dialog.mp-calendar {
+  position:fixed!important;
+  inset:0!important;
+  top:0!important;
+  right:0!important;
+  bottom:0!important;
+  left:0!important;
+  margin:auto!important;
+  width:min(360px, calc(100vw - 28px))!important;
+  max-width:calc(100vw - 28px)!important;
+  max-height:min(480px,calc(100dvh - 28px))!important;
+  overflow-y:auto!important;
+  box-sizing:border-box!important;
+  border:1px solid #eadce1!important;
+  border-radius:18px!important;
+  padding:14px!important;
+  background:white!important;
+  box-shadow:0 24px 80px #3a06265e!important;
+  transform:none!important;
+  animation:mpCalPop .13s ease-out!important;
+}
+dialog.mp-calendar::backdrop {background:rgba(35,5,19,.48);backdrop-filter:blur(2px)}
+
+/* V8.5 — Reliable SVG running-line border for ACTIVE tabs ONLY.
+   Uses animated SVG dash offset (supported across Chrome/Edge/mobile), not CSS masks. */
+#navigation .nav.active, .tabs button.sel, .tabs .sel, button.toggle.active {
+ position:relative!important; isolation:isolate!important;
+}
+.mp-tracing-border {
+ position:absolute!important; inset:0!important; width:100%!important; height:100%!important;
+ overflow:visible!important; z-index:20!important; pointer-events:none!important;
+ display:block!important; opacity:1!important;
+}
+.mp-tracing-border rect {
+ fill:none!important; stroke:#a81048!important; stroke-width:3!important;
+ stroke-linecap:round!important; stroke-dasharray:17 83!important;
+ stroke-dashoffset:0; vector-effect:non-scaling-stroke!important;
+ animation:mpSvgRunningLine 3.2s linear infinite!important;
+ filter:drop-shadow(0 0 2px #a8104880);
+}
+.tabs button.sel .mp-tracing-border rect { stroke:#ffe1eb!important; filter:drop-shadow(0 0 2px #fff5)!important; }
+@keyframes mpSvgRunningLine { to {stroke-dashoffset:-100;} }
+@media(prefers-reduced-motion:reduce){.mp-tracing-border rect{animation:none!important;stroke-dasharray:100 0!important;}}
+
+
+/* ===== MP CHECKLIST V10 | visual-only premium interaction layer =====
+   Original layout, Supabase API, recurrence, permissions, and date picker untouched. */
+:root{--mp-rose:#bc2e69;--mp-gold:#d6ac75;--mp-ink:#361325;--mp-curve:cubic-bezier(.2,.8,.2,1)}
+html{scroll-behavior:smooth}
+body{background:linear-gradient(145deg,#fff9fc 0%,#f8eaf0 46%,#fffafb 100%);background-attachment:fixed}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(ellipse 38% 38% at 15% 24%,#f2c6d64d,transparent 75%),radial-gradient(ellipse 40% 38% at 90% 78%,#e4bccb47,transparent 75%);animation:mpV10Breathe 19s ease-in-out infinite alternate}
+@keyframes mpV10Breathe{0%{opacity:.48;transform:translate3d(-2%,1%,0)}100%{opacity:.95;transform:translate3d(2%,-2%,0)}}
+/* Premium gradient header. Branding remains centered and company text continues flowing. */
+header{background:linear-gradient(108deg,#390315 0%,#680827 43%,#910d3e 72%,#4f0927 100%)!important;box-shadow:0 9px 38px #560e2a2a!important;isolation:isolate}
+header::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(circle at 52% 0%,#ffffff20,transparent 38%);animation:mpV10HeaderGlow 9s ease-in-out infinite alternate}
+@keyframes mpV10HeaderGlow{to{opacity:.25;transform:translateX(12%)}}
+.brand .logo{box-shadow:0 5px 18px #2e00154c, inset 0 0 0 1px #fff6!important;border-radius:13px!important}
+.mp-main-title{letter-spacing:-.75px;text-shadow:0 3px 16px #25000b50}
+#identity,.who{font-weight:700}
+/* Sidebar: a calmer surface and clear active-state hierarchy, with existing running-lines retained. */
+aside{background:linear-gradient(165deg,#fffafd 0%,#f9edf2 100%);border-right:1px solid #ecd5df;box-shadow:8px 0 30px #7e20400c}
+#navigation .nav{border-radius:13px;transition:background .28s var(--mp-curve),color .28s,box-shadow .28s,transform .28s var(--mp-curve)!important}
+#navigation .nav:hover:not(.active){background:#f5dfe9!important;color:#73082e!important;transform:translateX(4px)}
+#navigation .nav.active{background:linear-gradient(110deg,#f4dce6,#faeff3)!important;box-shadow:0 6px 19px #7d0a3414!important}
+/* Sections and cards are rounded, responsive, softly elevated. */
+main{min-width:0}
+.headline{letter-spacing:-.8px;color:var(--mp-ink)}
+.sub{font-weight:500}
+.panel{border:1px solid #ead7df!important;border-radius:20px!important;box-shadow:0 14px 35px #67213c0e!important;background:linear-gradient(145deg,#fff,#fffcfd)!important;transition:box-shadow .3s var(--mp-curve),border-color .3s var(--mp-curve)!important}
+.panel:hover{box-shadow:0 18px 46px #67213c16!important;border-color:#e3c0ce!important}
+.metric{--mouse-x:50%;--mouse-y:50%;border-radius:19px!important;border-color:#ead1dc!important;background:radial-gradient(240px circle at var(--mouse-x) var(--mouse-y),#fff1f6 0%,#fff 72%)!important;box-shadow:0 11px 25px #68103612!important;transition:transform .35s var(--mp-curve),box-shadow .35s var(--mp-curve),border-color .35s!important}
+.metric:hover{transform:translateY(-6px)!important;box-shadow:0 19px 40px #84184020!important;border-color:#d8a1b8!important}
+.metric .symbol{filter:drop-shadow(0 3px 5px #950e3933)}
+.metric small{letter-spacing:.01em;line-height:1.5}
+/* Task cards: clear hover affordance without altering completion logic. */
+.task{border-radius:16px!important;border-color:#ecd8e1!important;box-shadow:0 3px 14px #4b0a2408;transition:transform .25s var(--mp-curve),box-shadow .25s,border-color .25s!important}
+.task:hover{transform:translateY(-3px)!important;border-color:#dba9bc!important;box-shadow:0 11px 27px #69133217!important}
+.task strong{overflow-wrap:anywhere}
+/* Inputs: consistent focus, subtle surfaces and larger touch targets. */
+.field input,.field select,.field textarea,.filters input,.filters select{background:#fffdfd!important;border:1px solid #dcc5d0!important;border-radius:11px!important;transition:background .22s,border-color .22s,box-shadow .22s!important;min-height:43px}
+.field input:focus,.field select:focus,.field textarea:focus,.filters input:focus,.filters select:focus{outline:none!important;border-color:#9d2051!important;box-shadow:0 0 0 4px #aa1e4c1c!important;background:#fff!important}
+/* Buttons: tactile feedback and safe ripple layer. */
+.btn,.tabs button{transition:transform .22s var(--mp-curve),box-shadow .22s,background .22s!important}
+.btn:hover:not(:disabled){box-shadow:0 9px 22px #72072a27!important}
+.btn:focus-visible,.tabs button:focus-visible,.nav:focus-visible{outline:3px solid #e89ab7!important;outline-offset:3px}
+.btn:active:not(:disabled),.tabs button:active{transform:scale(.965)!important}
+.mp-v10-ripple{position:absolute;display:block;pointer-events:none;border-radius:50%;background:#ffffff6b;transform:translate(-50%,-50%) scale(0);animation:mpV10Ripple .62s ease-out forwards;z-index:25;mix-blend-mode:soft-light}
+@keyframes mpV10Ripple{to{opacity:0;transform:translate(-50%,-50%) scale(1)}}
+/* Tab selections retain the V8.5 perimeter tracer. */
+.tabs button.sel{box-shadow:0 7px 18px #72072a22!important}
+/* Dense content and mobile: wrap safely, do not create sideways clipping. */
+.tablewrap{border-radius:12px;border:1px solid #f0e0e6}
+.tablewrap th{background:#fbf0f5}
+.tablewrap tbody tr:hover{background:#fff2f7}
+.notice{border-radius:12px}
+@media(max-width:850px){
+ aside{box-shadow:0 7px 18px #570a2610}
+ .metrics{gap:10px}
+ .metric{min-width:0}
+ .panel{border-radius:17px!important}
+ .nav{min-height:42px}
+ .btn{min-height:40px}
+}
+@media(max-width:500px){
+ .metric{padding:14px 11px!important}
+ .metric .draw-number strong{font-size:27px!important}
+ .top{min-height:69px}
+ main{padding:16px 12px 50px}
+ .tabs{gap:8px}
+ .tabs button{min-height:42px}
+}
+@media(prefers-reduced-motion:reduce){
+ body::before,header::before{animation:none!important}
+ .mp-v10-ripple{display:none!important}
+ .task,.metric,.panel,.btn,#navigation .nav{transition:none!important}
+ html{scroll-behavior:auto}
+}
+/* ===== END V10 styling ===== */
+
 </style></head><body>
 <header><div class="top"><div class="brand mp-centered-brand"><span class="logo">✦</span><div class="mp-brand-copy"><span class="mp-main-title">MP Checklist</span><span class="mp-company-track"><small>Malik Polychem Private Limited</small></span></div></div><div class="topright"><span class="pulse"></span><span class="who" id="identity">Secure workspace</span><button class="btn outline small hidden" id="signout" style="color:white;border-color:#ffffff55" onclick="logout()">Sign out</button></div></div></header>
 <div id="auth" class="authpage"><div class="panel authbox"><h1>Welcome back</h1><p class="muted">Sign in with your registered email or mobile number and password.</p>
@@ -251,8 +373,8 @@ function displayDate(v){const m=String(v||'').match(/^(\d{4})-(\d{2})-(\d{2})(?:
 function isoDate(v){const x=String(v||'').trim();if(!x)return '';let m=x.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!m){const d=x.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);if(!d)throw new Error('Use DD-MM-YYYY, e.g. 16-11-2026.');m=[x,d[3],d[2],d[1]]}const y=+m[1],mo=+m[2],day=+m[3],test=new Date(Date.UTC(y,mo-1,day));if(test.getUTCFullYear()!==y||test.getUTCMonth()!==mo-1||test.getUTCDate()!==day)throw new Error('Invalid date.');return `${m[1]}-${String(mo).padStart(2,'0')}-${String(day).padStart(2,'0')}`}
 function formDate(id){const t=$(id);const v=isoDate(t.value);if(!v)throw new Error('Please select a date.');return v}
 let activeCalendar=null;
-function closeCalendar(){if(activeCalendar){activeCalendar.remove();activeCalendar=null}}
-function openCalendar(input){closeCalendar();let date;try{date=isoDate(input.value)}catch(e){}date=date||new Date().toISOString().slice(0,10);let [year,month]=date.split('-').map(Number);const pop=document.createElement('div');pop.className='mp-calendar';pop.setAttribute('role','dialog');pop.setAttribute('aria-label','Select date');pop.tabIndex=-1;// Render outside animated panels so their stacking contexts cannot cover the picker.
+function closeCalendar(){if(activeCalendar){if(activeCalendar.open)activeCalendar.close();activeCalendar.remove();activeCalendar=null}}
+function openCalendar(input){closeCalendar();let date;try{date=isoDate(input.value)}catch(e){}date=date||new Date().toISOString().slice(0,10);let [year,month]=date.split('-').map(Number);const pop=document.createElement('dialog');pop.className='mp-calendar';pop.setAttribute('role','dialog');pop.setAttribute('aria-label','Select date');pop.tabIndex=-1;// Render outside animated panels so their stacking contexts cannot cover the picker.
  const anchor=input.closest('.date-enhanced');
  pop._dateAnchor=anchor;
  document.body.append(pop);
@@ -261,25 +383,35 @@ function openCalendar(input){closeCalendar();let date;try{date=isoDate(input.val
  pop.style.margin='0';
  pop.style.maxHeight='min(440px, calc(100dvh - 16px))';
  pop.style.overflowY='auto';
- function positionCalendar(){
-   if(!pop.isConnected)return;
-   const r=anchor.getBoundingClientRect();
-   const viewportW=document.documentElement.clientWidth;
-   const width=Math.min(320,viewportW-16);
-   pop.style.width=width+'px';
-   pop.style.left=Math.max(8,Math.min(r.left,viewportW-width-8))+'px';
-   const desiredHeight=Math.min(pop.scrollHeight,440,window.innerHeight-16);
-   const below=window.innerHeight-r.bottom-8;
-   const above=r.top-8;
-   const openAbove=below<Math.min(desiredHeight,300)&&above>below;
-   pop.style.top=Math.max(8,openAbove?r.top-desiredHeight-6:r.bottom+6)+'px';
- }
+ function positionCalendar(){}
  pop._positionCalendar=positionCalendar;
+ pop.addEventListener('cancel',e=>{e.preventDefault();closeCalendar()});
+ pop.addEventListener('click',e=>{if(e.target!==pop)return;const r=pop.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closeCalendar()});
  activeCalendar=pop;
  function draw(){const first=new Date(year,month-1,1).getDay(),days=new Date(year,month,0).getDate(),chosen=(()=>{try{return isoDate(input.value)}catch(e){return ''}})(),today=new Date();const todayISO=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;pop.innerHTML=`<div class="mp-cal-head"><button type="button" data-prev aria-label="Previous month">‹</button><strong>${new Intl.DateTimeFormat('en-GB',{month:'long',year:'numeric'}).format(new Date(year,month-1,1))}</strong><button type="button" data-next aria-label="Next month">›</button></div><div class="mp-cal-grid">${['Su','Mo','Tu','We','Th','Fr','Sa'].map(x=>`<span class="mp-cal-dayname">${x}</span>`).join('')}${Array.from({length:first},()=>'<span></span>').join('')}${Array.from({length:days},(_,i)=>{const iso=`${year}-${String(month).padStart(2,'0')}-${String(i+1).padStart(2,'0')}`;return `<button type="button" data-date="${iso}" class="${iso===chosen?'chosen ':''}${iso===todayISO?'today':''}">${i+1}</button>`}).join('')}</div><div class="mp-cal-foot"><button type="button" data-today>Today</button><button type="button" data-clear>Clear</button></div>`;
  pop.querySelector('[data-prev]').onclick=()=>{month--;if(month<1){month=12;year--}draw()};pop.querySelector('[data-next]').onclick=()=>{month++;if(month>12){month=1;year++}draw()};pop.querySelectorAll('[data-date]').forEach(b=>b.onclick=()=>{input.value=displayDate(b.dataset.date);input.dispatchEvent(new Event('change'));closeCalendar()});pop.querySelector('[data-today]').onclick=()=>{input.value=displayDate(todayISO);input.dispatchEvent(new Event('change'));closeCalendar()};pop.querySelector('[data-clear]').onclick=()=>{input.value='';input.dispatchEvent(new Event('change'));closeCalendar()}}
- draw();pop._positionCalendar();pop.focus();}
-function enhanceDateInputs(){document.querySelectorAll('input[type="date"]').forEach(inp=>{const wrap=document.createElement('div');wrap.className='date-enhanced';inp.parentNode.insertBefore(wrap,inp);const text=document.createElement('input');text.type='text';text.id=inp.id;text.placeholder='DD-MM-YYYY';text.inputMode='numeric';text.autocomplete='off';text.setAttribute('aria-label','Date in DD-MM-YYYY format');text.value=inp.value?displayDate(inp.value):'';const btn=document.createElement('button');btn.type='button';btn.className='calendar-pick';btn.textContent='▦';btn.title='Choose date';btn.setAttribute('aria-label','Choose date');inp.remove();wrap.append(text,btn);btn.addEventListener('click',e=>{e.stopPropagation();openCalendar(text)});text.addEventListener('focus',()=>{if(!activeCalendar)openCalendar(text)});text.addEventListener('blur',()=>{if(!text.value)return;try{text.value=displayDate(isoDate(text.value));text.setCustomValidity('')}catch(e){text.setCustomValidity(e.message)}});text.addEventListener('input',()=>text.setCustomValidity(''));});document.addEventListener('pointerdown',e=>{if(activeCalendar&&!activeCalendar.contains(e.target)&&!activeCalendar._dateAnchor?.contains(e.target))closeCalendar()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCalendar()});window.addEventListener('resize',()=>activeCalendar?._positionCalendar?.());window.addEventListener('scroll',()=>activeCalendar?._positionCalendar?.(),true);}
+ draw();pop.showModal();pop.focus();}
+function enhanceDateInputs(){document.querySelectorAll('input[type="date"]').forEach(inp=>{
+// Critical fix: the task form uses the browser's native picker, not the custom
+// popup. A native picker is painted by the browser, outside panel stacking layers.
+if(inp.id==='taskStart'){
+ const wrap=document.createElement('div');wrap.className='date-enhanced';
+ inp.parentNode.insertBefore(wrap,inp);
+ const text=document.createElement('input');text.type='text';text.id='taskStart';text.placeholder='DD-MM-YYYY';text.inputMode='numeric';text.autocomplete='off';text.setAttribute('aria-label','First planned date in DD-MM-YYYY format');
+ const native=inp;native.id='taskStartNative';native.style.cssText='position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;left:50%;top:50%;padding:0;border:0;';
+ const btn=document.createElement('button');btn.type='button';btn.className='calendar-pick';btn.textContent='▦';btn.title='Choose date';btn.setAttribute('aria-label','Open browser date picker');
+ wrap.append(text,btn,native);
+ const sync=()=>{text.value=native.value?displayDate(native.value):'';text.setCustomValidity('');text.dispatchEvent(new Event('change',{bubbles:true}))};
+ native.addEventListener('change',sync);
+ const picker=()=>{try{if(text.value)native.value=isoDate(text.value)}catch(e){} if(typeof native.showPicker==='function')native.showPicker();else native.click()};
+ btn.addEventListener('click',picker);
+ text.addEventListener('click',picker);
+ text.addEventListener('focus',()=>{ /* typing remains available; picker button opens the native calendar */ });
+ text.addEventListener('blur',()=>{if(!text.value)return;try{text.value=displayDate(isoDate(text.value));text.setCustomValidity('')}catch(e){text.setCustomValidity(e.message)}});
+ text.addEventListener('input',()=>text.setCustomValidity(''));
+ return;
+}
+const wrap=document.createElement('div');wrap.className='date-enhanced';inp.parentNode.insertBefore(wrap,inp);const text=document.createElement('input');text.type='text';text.id=inp.id;text.placeholder='DD-MM-YYYY';text.inputMode='numeric';text.autocomplete='off';text.setAttribute('aria-label','Date in DD-MM-YYYY format');text.value=inp.value?displayDate(inp.value):'';const btn=document.createElement('button');btn.type='button';btn.className='calendar-pick';btn.textContent='▦';btn.title='Choose date';btn.setAttribute('aria-label','Choose date');inp.remove();wrap.append(text,btn);btn.addEventListener('click',e=>{e.stopPropagation();openCalendar(text)});text.addEventListener('focus',()=>{if(!activeCalendar)openCalendar(text)});text.addEventListener('blur',()=>{if(!text.value)return;try{text.value=displayDate(isoDate(text.value));text.setCustomValidity('')}catch(e){text.setCustomValidity(e.message)}});text.addEventListener('input',()=>text.setCustomValidity(''));});document.addEventListener('pointerdown',e=>{if(activeCalendar&&!activeCalendar.contains(e.target)&&!activeCalendar._dateAnchor?.contains(e.target))closeCalendar()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCalendar()});window.addEventListener('resize',()=>activeCalendar?._positionCalendar?.());window.addEventListener('scroll',()=>activeCalendar?._positionCalendar?.(),true);}
 function toast(message,bad=false){const host=$('toastStack');if(!host)return;const d=document.createElement('div');d.className='toast-item'+(bad?' bad':'');d.textContent=message;host.append(d);setTimeout(()=>{d.style.opacity='0';d.style.transform='translateX(30px)';setTimeout(()=>d.remove(),300)},3600)}
 function animateCount(node,end){const n=Number(end);if(!Number.isFinite(n)||matchMedia('(prefers-reduced-motion: reduce)').matches){node.textContent=end;return}const started=performance.now(),duration=650;function frame(now){const t=Math.min(1,(now-started)/duration),e=1-Math.pow(1-t,4);node.textContent=Math.round(n*e).toLocaleString('en-IN');if(t<1&&node.isConnected)requestAnimationFrame(frame)}requestAnimationFrame(frame)}
 function show(id,on=true){$(id).classList.toggle('hidden',!on)}function htmlSafe(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -322,4 +454,78 @@ async function saveTime(){try{const r=await call('mpSaveReminderHour',token,Numb
 enhanceDateInputs();
 sb.auth.onAuthStateChange((event)=>{if(event==='PASSWORD_RECOVERY'){show('auth',true);show('workspace',false);switchSetup(true);authNote('Email verified. Enter your new password and select Save password & sign in.');}});
 restoreLogin();
-</script></body></html>
+
+// V8.5: mount a real SVG perimeter tracer on the selected navigation and view tabs.
+// Never attach to inactive tabs. Watch class changes so the tracer moves as the user navigates.
+(function initMpSelectedTabTracers(){
+  const SVG_NS='http://www.w3.org/2000/svg';
+  const selector='#navigation .nav, .tabs button, button.toggle';
+  const isSelected=el=>el.matches('#navigation .nav.active, .tabs button.sel, button.toggle.active');
+  function syncTracers(){
+    document.querySelectorAll(selector).forEach(el=>{
+      const existing=el.querySelector(':scope > svg.mp-tracing-border');
+      if(!isSelected(el)) { if(existing) existing.remove(); return; }
+      if(existing) return;
+      const svg=document.createElementNS(SVG_NS,'svg');
+      svg.setAttribute('class','mp-tracing-border');
+      svg.setAttribute('viewBox','0 0 100 100');
+      svg.setAttribute('preserveAspectRatio','none');
+      svg.setAttribute('aria-hidden','true');
+      const rect=document.createElementNS(SVG_NS,'rect');
+      rect.setAttribute('x','1.5');rect.setAttribute('y','1.5');
+      rect.setAttribute('width','97');rect.setAttribute('height','97');
+      rect.setAttribute('rx','10');rect.setAttribute('ry','10');
+      rect.setAttribute('pathLength','100');
+      svg.appendChild(rect);el.appendChild(svg);
+    });
+  }
+  let scheduled=false;
+  function requestSync(){if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;syncTracers()});}
+  const observer=new MutationObserver(records=>{
+    if(records.some(r=>r.type==='attributes'&&r.attributeName==='class'||r.type==='childList'))requestSync();
+  });
+  observer.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
+  requestSync();
+})();
+
+</script>
+<script id="mp-v10-interaction">
+/* Progressive visual enhancements. No database/network/auth operations. */
+(()=>{
+ 'use strict';
+ const motion=window.matchMedia('(prefers-reduced-motion: reduce)');
+ const isMotion=()=>!motion.matches;
+ // Shared click ripple on buttons; delegated so dynamically rendered buttons work too.
+ document.addEventListener('pointerdown',event=>{
+   if(!isMotion() || event.pointerType==='touch')return;
+   const btn=event.target.closest('.btn,.tabs button');
+   if(!btn || btn.disabled)return;
+   const r=btn.getBoundingClientRect();if(!r.width||!r.height)return;
+   const dot=document.createElement('span');dot.className='mp-v10-ripple';
+   const size=Math.max(r.width,r.height)*2.1;
+   dot.style.width=dot.style.height=size+'px';
+   dot.style.left=(event.clientX-r.left)+'px';dot.style.top=(event.clientY-r.top)+'px';
+   const oldPosition=getComputedStyle(btn).position;
+   if(oldPosition==='static')btn.style.position='relative';
+   btn.appendChild(dot);dot.addEventListener('animationend',()=>dot.remove(),{once:true});
+ },{passive:true});
+ // Move gentle spotlight with cursor on existing overview cards.
+ document.addEventListener('pointermove',event=>{
+   if(!isMotion() || event.pointerType==='touch')return;
+   const card=event.target.closest('#metrics .metric');if(!card)return;
+   const r=card.getBoundingClientRect();
+   card.style.setProperty('--mouse-x',((event.clientX-r.left)/r.width*100).toFixed(1)+'%');
+   card.style.setProperty('--mouse-y',((event.clientY-r.top)/r.height*100).toFixed(1)+'%');
+ },{passive:true});
+ // Press '/' to focus the dashboard search when not typing elsewhere.
+ document.addEventListener('keydown',event=>{
+   if(event.key!=='/' || event.ctrlKey || event.altKey || event.metaKey)return;
+   const tag=document.activeElement?.tagName;
+   if(['INPUT','TEXTAREA','SELECT'].includes(tag) || document.activeElement?.isContentEditable)return;
+   const search=document.getElementById('taskSearch');
+   if(search && search.getClientRects().length){event.preventDefault();search.focus();}
+ });
+})();
+</script>
+
+</body></html>
