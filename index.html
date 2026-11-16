@@ -80,8 +80,46 @@ header:after{content:'';position:absolute;left:-40%;bottom:0;width:35%;height:1p
 @media(max-width:390px){#navigation .nav{font-size:11px;padding:10px 5px}}
 
 @media(max-width:850px){aside{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible;position:static;gap:7px;padding:11px}.nav{white-space:normal;width:100%;min-width:0;justify-content:center;overflow-wrap:anywhere;text-align:center;border:1px solid #eadce1}.shell{overflow-x:hidden}}
+
+/* MP Checklist Motion V8 — display-only changes, original business logic intact. */
+.top{position:relative;min-height:82px;justify-content:flex-end}
+.mp-centered-brand{position:absolute;left:50%;transform:translateX(-50%);display:flex;justify-content:center;align-items:center;gap:11px;white-space:nowrap;text-align:center;max-width:calc(100% - 265px);pointer-events:none}
+.mp-brand-copy{display:flex;flex-direction:column;align-items:center;min-width:0}
+.mp-main-title{display:block;font-size:clamp(19px,2.2vw,25px);line-height:1.2;font-weight:850;letter-spacing:-.4px}
+.mp-company-track{display:block;width:245px;max-width:100%;height:19px;overflow:hidden;position:relative;margin-top:2px;mask-image:linear-gradient(to right,transparent,black 12%,black 88%,transparent)}
+.brand .mp-company-track small{display:block;width:max-content;font-size:10px;letter-spacing:.11em;text-transform:none;color:#fff0f5;font-weight:650;white-space:nowrap;animation:mpCompanyFlow 9s linear infinite;opacity:.92}
+@keyframes mpCompanyFlow{from{transform:translateX(-105%)}to{transform:translateX(245px)}}
+/* Animated tracing border appears ONLY on active navigation selections. */
+#navigation .nav,.tabs button{position:relative;isolation:isolate}
+#navigation .nav.active,.tabs button.sel{overflow:visible}
+#navigation .nav.active::after,.tabs button.sel::after{
+ content:"";position:absolute;inset:-2px;border-radius:inherit;padding:2px;pointer-events:none;z-index:2;
+ background:conic-gradient(from var(--mp-line-angle,0deg),transparent 0deg,transparent 222deg,#dd5e8c 258deg,#76052e 294deg,#fff0f5 313deg,transparent 342deg);
+ -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+ -webkit-mask-composite:xor;mask-composite:exclude;
+ animation:mpRunningOutline 3.5s linear infinite;
+}
+@property --mp-line-angle{syntax:"<angle>";inherits:false;initial-value:0deg}
+@keyframes mpRunningOutline{to{--mp-line-angle:360deg}}
+/* Distinct animated dot provides fallback on older browsers without @property. */
+#navigation .nav.active::before,.tabs button.sel::before{
+ content:"";position:absolute;bottom:0;left:0;width:34%;height:2px;border-radius:5px;
+ background:linear-gradient(90deg,transparent,#c12260,#ff9bbb,transparent);
+ animation:mpMovingUnderline 2.9s linear infinite;pointer-events:none;z-index:3
+}
+@keyframes mpMovingUnderline{0%{left:-34%}100%{left:100%}}
+/* Existing dashboard border tracer retained; numbers visibly pop every five seconds. */
+#metrics .metric .draw-number strong{display:inline-block;transform-origin:40% 65%;animation:mpNumberPop 5s cubic-bezier(.19,1,.22,1) infinite;animation-delay:calc(var(--stagger,0ms) * -1)}
+@keyframes mpNumberPop{0%,5%,18%,100%{transform:scale(1);filter:drop-shadow(0 0 0 transparent)}9%{transform:scale(1.23);filter:drop-shadow(0 4px 5px #9e174d35)}13%{transform:scale(.96)}}
+/* Soft ambient color drifting in background; cards/text remain legible. */
+body:after{content:"";position:fixed;z-index:-1;pointer-events:none;inset:-20%;background:radial-gradient(circle at 18% 35%,#eeafc121 0%,transparent 30%),radial-gradient(circle at 78% 72%,#d57e9a15 0%,transparent 34%);animation:mpAmbientDrift 19s ease-in-out infinite alternate}
+@keyframes mpAmbientDrift{to{transform:translate3d(2%,-3%,0) scale(1.04)}}
+@media(max-width:850px){.top{min-height:73px}.mp-centered-brand{max-width:calc(100% - 145px);left:46%}.mp-main-title{font-size:19px}.mp-company-track{width:190px}.brand .mp-company-track small{font-size:8px}@keyframes mpCompanyFlow{from{transform:translateX(-105%)}to{transform:translateX(190px)}}}
+@media(max-width:510px){.top{min-height:77px;padding:10px}.mp-centered-brand{left:42%;max-width:calc(100% - 145px);gap:5px}.mp-centered-brand .logo{width:27px;height:27px;flex:0 0 27px}.mp-main-title{font-size:16px}.mp-company-track{width:145px;height:15px}.brand .mp-company-track small{font-size:7px;letter-spacing:.04em}@keyframes mpCompanyFlow{from{transform:translateX(-105%)}to{transform:translateX(145px)}}.topright{position:relative;z-index:3}.topright .btn{padding:7px 8px;font-size:11px}}
+@media(prefers-reduced-motion:reduce){.brand .mp-company-track small,#navigation .nav.active::after,#navigation .nav.active::before,.tabs button.sel::after,.tabs button.sel::before,#metrics .metric .draw-number strong,body:after{animation:none!important}.brand .mp-company-track small{transform:none!important}}
+
 </style></head><body>
-<header><div class="top"><div class="brand"><span class="logo">✦</span><div>MP Checklist<small>MALIK POLYCHEM</small></div></div><div class="topright"><span class="pulse"></span><span class="who" id="identity">Secure workspace</span><button class="btn outline small hidden" id="signout" style="color:white;border-color:#ffffff55" onclick="logout()">Sign out</button></div></div></header>
+<header><div class="top"><div class="brand mp-centered-brand"><span class="logo">✦</span><div class="mp-brand-copy"><span class="mp-main-title">MP Checklist</span><span class="mp-company-track"><small>Malik Polychem Private Limited</small></span></div></div><div class="topright"><span class="pulse"></span><span class="who" id="identity">Secure workspace</span><button class="btn outline small hidden" id="signout" style="color:white;border-color:#ffffff55" onclick="logout()">Sign out</button></div></div></header>
 <div id="auth" class="authpage"><div class="panel authbox"><h1>Welcome back</h1><p class="muted">Sign in with your registered email or mobile number and password.</p>
 <div class="field"><label>Email or mobile number</label><input id="loginEmail" type="text" autocomplete="username" placeholder="Email / 10-digit phone"></div>
 <div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your password"></div>
