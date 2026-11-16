@@ -25,6 +25,8 @@
   .auth{padding:24px 18px}
 }
 @media(max-width:360px){.tab{font-size:12px;min-height:42px}.metric-num{font-size:24px}.brand{font-size:13px}.top-right{font-size:10px}}
+
+.auth-actions{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:16px 0 10px}.auth-actions .text-btn{font-size:12px;color:#75052f;padding:6px 0;text-decoration:underline;text-underline-offset:3px}.auth-actions .text-btn:hover{color:#aa1450}.auth-actions .text-btn:focus-visible{outline:2px solid #75052f;border-radius:4px}.auth .text-btn{color:#75052f}
 </style></head><body>
 <div id="app"><div class="boot">MP Checklist</div></div>
 <script type="module">
@@ -43,7 +45,54 @@ const notify=(msg,err=false)=>{let el=document.querySelector('#toast');if(!el){e
 async function checked(q){const {data,error}=await q;if(error)throw error;return data;}
 async function loadTasks(from=first(),to=monthEnd(),filter={}){let out=[];for(let p=0;p<50;p++){let q=sb.from('mp_tasks').select('id,assignee_name,assignee_email,task_name,planned_on,actual_on,is_done,status,frequency,source_task_id').gte('planned_on',from).lte('planned_on',to).order('planned_on').range(p*1000,p*1000+999);if(filter.email)q=q.eq('assignee_email',filter.email);const part=await checked(q);out.push(...part);if(part.length<1000)break;}return out;}
 function nav(){const tabs=admin()?['Dashboard','Tasks','Employees','Holidays','Reports','Profile']:['Dashboard','My Tasks','Holidays','Profile'];app.innerHTML=`<header class="top"><div class="brand">✦ &nbsp; MP Checklist <small>MALIK POLYCHEM</small></div><div class="top-right"><span class="pill">${esc(state.profile.app_role.toUpperCase())}</span><span>${esc(state.profile.full_name)}</span><button id="signout" class="outline">Sign out</button></div></header><div class="layout"><aside class="nav">${tabs.map(t=>`<button data-page="${esc(t)}" class="tab ${t===state.page?'active':''}">${esc(t)}</button>`).join('')}</aside><main class="main" id="view"></main></div>`;document.querySelector('#signout').onclick=async()=>{await sb.auth.signOut();state.profile=null;state.user=null;login()};document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>{state.page=b.dataset.page;nav();show()});}
-function login(){app.innerHTML=`<div class="auth-wrap"><section class="auth panel animate"><div class="brand big">✦ MP Checklist</div><p class="muted">Malik Polychem · Secure Employee Login</p><form id="login"><label>Email<input type="email" name="email" required autocomplete="username" placeholder="name@company.com"></label><label>Password<input type="password" name="password" required autocomplete="current-password"></label><button class="primary wide">Sign in</button></form><p class="small muted">No Google Apps Script or Google Drive redirect.</p></section></div>`;document.querySelector('#login').onsubmit=async e=>{e.preventDefault();const b=e.target.querySelector('button');b.disabled=true;b.textContent='Signing in…';const f=new FormData(e.target);const {error}=await sb.auth.signInWithPassword({email:String(f.get('email')).trim(),password:String(f.get('password'))});if(error){notify(error.message,true);b.disabled=false;b.textContent='Sign in';return}await boot()};}
+function showAuthNotice(message,err=false){const p=document.getElementById('auth-note');if(p){p.className='small '+(err?'bad':'good');p.textContent=message}else notify(message,err)}
+function login(){
+ app.innerHTML=`<div class="auth-wrap"><section class="auth panel animate"><div class="brand big">✦ MP Checklist</div><p class="muted">Malik Polychem · Secure Employee Login</p><form id="login"><label>Email or Mobile Number<input type="text" name="identifier" required autocomplete="username" placeholder="name@company.com or 10-digit mobile" inputmode="email"></label><label>Password<input type="password" name="password" required autocomplete="current-password" placeholder="Your password"></label><button class="primary wide">Sign in</button></form><div class="auth-actions"><button id="first-time" class="text-btn" type="button">First time? Set password</button><button id="forgot-password" class="text-btn" type="button">Forgot password?</button></div><p id="auth-note" class="small muted">For mobile login, your verified number must be linked to your account.</p></section></div>`;
+ document.getElementById('first-time').onclick=()=>requestPasswordReset('First-time password setup');
+ document.getElementById('forgot-password').onclick=()=>requestPasswordReset('Reset your password');
+ document.getElementById('login').onsubmit=async e=>{
+  e.preventDefault();let b=e.target.querySelector('button[type="submit"],button.primary');b.disabled=true;b.textContent='Signing in…';
+  const f=new FormData(e.target),identifier=String(f.get('identifier')).trim(),password=String(f.get('password'));
+  let credentials;
+  if(identifier.includes('@')) credentials={email:identifier.toLowerCase(),password};
+  else {
+    let digits=identifier.replace(/\D/g,'');
+    if(digits.startsWith('91')&&digits.length===12)digits=digits.slice(2);
+    if(digits.length!==10){showAuthNotice('Enter a valid email or 10-digit mobile number.',true);b.disabled=false;b.textContent='Sign in';return}
+    credentials={phone:'+91'+digits,password};
+  }
+  const {error}=await sb.auth.signInWithPassword(credentials);
+  if(error){showAuthNotice(identifier.includes('@')?'Login failed. Check email/password or use Set password.':'Mobile login requires your verified phone number linked to Supabase Auth. Contact Admin if it is not linked.',true);b.disabled=false;b.textContent='Sign in';return}
+  await boot();
+ };
+}
+function requestPasswordReset(title='Set your password'){
+ app.innerHTML=`<div class="auth-wrap"><section class="auth panel animate"><div class="brand big">✦ MP Checklist</div><h2 style="margin-top:18px">${esc(title)}</h2><p class="muted">Enter your registered email. We will send a secure password setup link. For security, mobile number alone cannot reset a password without verification.</p><form id="recover"><label>Registered email address<input type="email" name="email" required autocomplete="email" placeholder="name@company.com"></label><button type="submit" class="primary wide">Send password setup link</button></form><p id="auth-note" class="small muted"></p><button class="text-btn" id="back-login" type="button">← Back to sign in</button></section></div>`;
+ document.getElementById('back-login').onclick=login;
+ document.getElementById('recover').onsubmit=async e=>{
+  e.preventDefault();let b=e.target.querySelector('button');b.disabled=true;b.textContent='Sending…';
+  let email=String(new FormData(e.target).get('email')).trim().toLowerCase();
+  const redirectTo=new URL(window.location.pathname,window.location.origin);redirectTo.searchParams.set('mode','recovery');
+  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:redirectTo.toString()});
+  if(error)showAuthNotice('Unable to send link: '+error.message,true);
+  else showAuthNotice('If this email is registered, check its inbox for the password setup link. Also check Spam.');
+  b.disabled=false;b.textContent='Resend link';
+ };
+}
+function resetPasswordForm(){
+ app.innerHTML=`<div class="auth-wrap"><section class="auth panel animate"><div class="brand big">✦ MP Checklist</div><h2 style="margin-top:18px">Set new password</h2><p class="muted">Choose a unique password of at least 12 characters.</p><form id="set-password"><label>New password<input type="password" name="password" required minlength="12" autocomplete="new-password"></label><label>Confirm password<input type="password" name="confirm" required minlength="12" autocomplete="new-password"></label><button type="submit" class="primary wide">Save new password</button></form><p class="small muted" id="auth-note"></p></section></div>`;
+ document.getElementById('set-password').onsubmit=async e=>{
+  e.preventDefault();let f=new FormData(e.target),pw=String(f.get('password'));
+  if(pw!==f.get('confirm')){showAuthNotice('Passwords do not match.',true);return}
+  const {data:{user},error:sessionError}=await sb.auth.getUser();if(sessionError||!user){showAuthNotice('Password link expired or invalid. Request a new link.',true);return}
+  const b=e.target.querySelector('button');b.disabled=true;
+  const {error}=await sb.auth.updateUser({password:pw});
+  if(error){showAuthNotice(error.message,true);b.disabled=false;return}
+  history.replaceState(null,'',window.location.pathname);
+  showAuthNotice('Password saved successfully. Opening your dashboard…');
+  setTimeout(()=>boot(),900);
+ };
+}
 async function boot(){try{const {data:{user},error}=await sb.auth.getUser();if(error||!user){login();return}state.user=user;state.profile=await checked(sb.from('mp_employees').select('id,full_name,email,department,app_role').eq('auth_user_id',user.id).single());state.employees=admin()?await checked(sb.from('mp_employees').select('id,full_name,email,department,app_role').order('full_name')):[state.profile];nav();await show();}catch(e){app.innerHTML=`<div class="auth-wrap"><section class="panel auth"><h2>Unable to open account</h2><p class="warning">${esc(e.message)}</p><p>Check that your Supabase Auth account is linked to MP Checklist employees.</p><button class="primary" id="retry">Sign out</button></section></div>`;document.querySelector('#retry').onclick=async()=>{await sb.auth.signOut();login()};}}
 function title(t,sub=''){return `<div class="page-head"><h1>${esc(t)}</h1><p class="muted">${esc(sub)}</p></div>`}
 const status=t=>t.is_done?'Done':t.planned_on<today()?'Overdue':'Pending';
@@ -56,6 +105,12 @@ function employees(v){v.innerHTML=title('Employees','Imported directory (read on
 async function holidays(v){const rows=await checked(sb.from('mp_holidays').select('holiday_on,day_name,name,type').order('holiday_on'));v.innerHTML=title('Holidays','Existing Google Sheet holiday calendar')+`<section class="panel">${rows.map(h=>`<div class="item"><strong>${fmt(h.holiday_on)} · ${esc(h.name)}</strong><span class="pill">${esc(h.type||'')}</span></div>`).join('')}</section>`}
 async function reports(v){v.innerHTML=title('Reports','Export employee tasks as CSV')+`<form id="report" class="panel form-grid"><label>Employee<select name="email">${state.employees.map(e=>`<option value="${esc(e.email)}">${esc(e.full_name)}</option>`).join('')}</select></label><label>From<input type="date" name="from" value="${first()}" required></label><label>To<input type="date" name="to" value="${monthEnd()}" required></label><button class="primary">Export CSV</button></form>`;document.querySelector('#report').onsubmit=async e=>{e.preventDefault();const f=new FormData(e.target);if(f.get('from')>f.get('to')){notify('Invalid date range',true);return}try{const rows=await loadTasks(f.get('from'),f.get('to'),{email:f.get('email')});const data=[['Task ID','Task','Assignee','Frequency','Planned','Actual','Status'],...rows.map(t=>[t.source_task_id||t.id,t.task_name,t.assignee_email,t.frequency,fmt(t.planned_on),fmt(t.actual_on),status(t)])];const csv=data.map(row=>row.map(x=>'"'+String(x??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');const u=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=u;a.download='MP-Checklist-Report.csv';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);notify(`${rows.length} tasks exported`)}catch(err){notify(err.message,true)}}}
 function profile(v){const p=state.profile;v.innerHTML=title('Profile','Current signed-in account')+`<section class="panel profile"><div class="avatar">${esc(p.full_name[0])}</div><div><h2>${esc(p.full_name)}</h2><span class="pill">${esc(p.app_role.toUpperCase())}</span></div></section><section class="panel details">${[['Email',p.email],['Department',p.department],['Role',p.app_role]].map(([k,x])=>`<div><span class="muted">${k}</span><strong>${esc(x)}</strong></div>`).join('')}</section>`}
-boot();
+sb.auth.onAuthStateChange((event)=>{
+ if(event==='PASSWORD_RECOVERY')resetPasswordForm();
+});
+if(new URLSearchParams(location.search).get('mode')==='recovery'){
+ app.innerHTML='<div class="auth-wrap"><section class="auth panel"><h2>Verifying your password link…</h2><p class="muted">If this takes too long, reopen the setup link from your email.</p></section></div>';
+ sb.auth.getUser().then(({data:{user}})=>{if(user)resetPasswordForm();else requestPasswordReset('Request a new password link')});
+}else boot();
 
 </script></body></html>
