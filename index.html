@@ -118,6 +118,58 @@ body:after{content:"";position:fixed;z-index:-1;pointer-events:none;inset:-20%;b
 @media(max-width:510px){.top{min-height:77px;padding:10px}.mp-centered-brand{left:42%;max-width:calc(100% - 145px);gap:5px}.mp-centered-brand .logo{width:27px;height:27px;flex:0 0 27px}.mp-main-title{font-size:16px}.mp-company-track{width:145px;height:15px}.brand .mp-company-track small{font-size:7px;letter-spacing:.04em}@keyframes mpCompanyFlow{from{transform:translateX(-105%)}to{transform:translateX(145px)}}.topright{position:relative;z-index:3}.topright .btn{padding:7px 8px;font-size:11px}}
 @media(prefers-reduced-motion:reduce){.brand .mp-company-track small,#navigation .nav.active::after,#navigation .nav.active::before,.tabs button.sel::after,.tabs button.sel::before,#metrics .metric .draw-number strong,body:after{animation:none!important}.brand .mp-company-track small{transform:none!important}}
 
+
+/* V8.1: visible active-only running line, calendar layering, centered brand. */
+.top{position:relative;min-height:76px}
+.top .mp-centered-brand{position:absolute!important;top:50%;left:50%!important;transform:translate(-50%,-50%)!important;display:flex!important;align-items:center;justify-content:center;max-width:calc(100% - 240px);margin:0;z-index:1}
+.top .topright{position:relative;z-index:2;margin-left:auto}
+.mp-main-title{text-align:center}
+.mp-company-track{isolation:isolate;overflow:hidden}
+.mp-company-track small{will-change:transform}
+
+/* Calendar must paint above the next animated .panel (which forms a stacking context). */
+#tasks .panel:has(.mp-calendar),
+#tasks .panel:has(.date-enhanced:focus-within),
+.panel:has(.mp-calendar){position:relative;z-index:100!important;overflow:visible!important;transform:none!important;filter:none!important;animation:none!important}
+#tasks .formgrid,.date-enhanced{overflow:visible!important}
+.date-enhanced:has(.mp-calendar){position:relative!important;z-index:101!important;isolation:auto!important}
+.mp-calendar{z-index:9999!important;position:absolute!important;overflow:visible!important;box-shadow:0 20px 56px #4e092b55!important}
+.mp-cal-grid button{position:relative;z-index:1}
+.mp-cal-grid button:hover{background:#f0ccd9}
+
+/* Explicit border highlight with animated traveling stripe. Existing static selection remains intact. */
+#navigation .nav.active,.tabs button.sel{position:relative!important;overflow:hidden!important;isolation:isolate}
+#navigation .nav.active::after,.tabs button.sel::after{
+  content:""!important;
+  position:absolute!important;inset:0!important;border:2px solid transparent!important;
+  border-radius:inherit!important;padding:0!important;
+  background:linear-gradient(90deg,transparent 0%,#c72d68 20%,#ffe6ef 33%,#7f092e 43%,transparent 60%) 0 0 / 240% 100%!important;
+  -webkit-mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0)!important;
+  -webkit-mask-composite:xor!important;mask-composite:exclude!important;
+  animation:mpLineSweepVisible 2.7s linear infinite!important;
+  pointer-events:none!important;z-index:5!important;
+}
+#navigation .nav.active::before,.tabs button.sel::before{
+  content:""!important;position:absolute!important;bottom:0!important;top:auto!important;
+  left:-45%!important;width:45%!important;height:3px!important;
+  background:linear-gradient(90deg,transparent,#9a0a3e,#ffb4cd,transparent)!important;
+  animation:mpLineTravelVisible 2.25s linear infinite!important;z-index:6!important;
+  pointer-events:none!important;box-shadow:0 0 8px #a3145688!important
+}
+#navigation .nav:not(.active)::before,#navigation .nav:not(.active)::after,
+.tabs button:not(.sel)::before,.tabs button:not(.sel)::after{animation:none!important;content:none!important}
+@keyframes mpLineSweepVisible{0%{background-position:100% 0}100%{background-position:-135% 0}}
+@keyframes mpLineTravelVisible{0%{left:-45%}100%{left:100%}}
+/* Pop numbers every 5 seconds, independently of when the dashboard was loaded. */
+#metrics .metric .draw-number strong{animation:mpNumberPulseVisible 5s ease-in-out infinite!important;will-change:transform}
+@keyframes mpNumberPulseVisible{0%,5%,17%,100%{transform:scale(1)}10%{transform:scale(1.22)}13%{transform:scale(.94)}}
+@media(max-width:850px){.top .mp-centered-brand{max-width:calc(100% - 125px)}.mp-main-title{font-size:16px}.mp-company-track{max-width:185px}}
+@media(max-width:510px){.top .mp-centered-brand{left:43%!important;max-width:calc(100% - 126px)}.mp-main-title{font-size:15px}.mp-company-track{max-width:142px}}
+@media(prefers-reduced-motion:reduce){
+ #navigation .nav.active::before,#navigation .nav.active::after,.tabs button.sel::before,.tabs button.sel::after,
+ #metrics .metric .draw-number strong{animation:none!important}
+}
+
 </style></head><body>
 <header><div class="top"><div class="brand mp-centered-brand"><span class="logo">✦</span><div class="mp-brand-copy"><span class="mp-main-title">MP Checklist</span><span class="mp-company-track"><small>Malik Polychem Private Limited</small></span></div></div><div class="topright"><span class="pulse"></span><span class="who" id="identity">Secure workspace</span><button class="btn outline small hidden" id="signout" style="color:white;border-color:#ffffff55" onclick="logout()">Sign out</button></div></div></header>
 <div id="auth" class="authpage"><div class="panel authbox"><h1>Welcome back</h1><p class="muted">Sign in with your registered email or mobile number and password.</p>
