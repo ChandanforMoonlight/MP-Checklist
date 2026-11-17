@@ -459,7 +459,23 @@ header::before{animation:mpV17HeaderShine 8s ease-in-out infinite alternate!impo
 @media(max-width:880px){.mp-overdue-filters{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:550px){.mp-overdue-filters{grid-template-columns:1fr}.mp-series-item{align-items:flex-start;flex-wrap:wrap}.mp-series-list{max-height:55dvh}.profile-hero h2{font-size:20px!important}}
 @media(prefers-reduced-motion:reduce){.profile-hero h2,header::before{animation:none!important}}
-</style></head><body>
+</style>
+<style id="mp-v18-onboarding-style">
+.mp-push-onboarding{border:1px solid #efd0dd;background:#fffafc;color:#341725;border-radius:23px;box-shadow:0 28px 85px #320b2963;padding:28px;max-width:min(440px,calc(100vw - 28px));width:100%;margin:auto;max-height:calc(100dvh - 35px);overflow-y:auto;animation:mpPushModalEntrance .32s cubic-bezier(.2,.8,.2,1) both}
+.mp-push-onboarding:not([open]){display:none}
+.mp-push-onboarding::backdrop{background:#210b1d9e;backdrop-filter:blur(2px)}
+.mp-push-onboarding h2{font-weight:850;font-size:23px;margin:10px 0 12px;color:#590b2b}
+.mp-push-onboarding p{line-height:1.7;margin:0 0 13px;font-size:14px;color:#54414a}
+.mp-push-onboarding .mp-push-onboard-small{font-size:12px;color:#8a6878}
+.mp-push-onboard-icon{font-size:30px;width:65px;height:65px;display:grid;place-items:center;border-radius:19px;background:linear-gradient(135deg,#f7d7e3,#f2b8ce)}
+.mp-push-onboard-buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:19px}
+.mp-push-onboard-buttons .btn{min-height:45px}
+.mp-push-onboarding .mp-push-onboard-status{font-size:12px;min-height:1.4em;word-wrap:break-word;margin:10px 0 0;color:#a12b45}
+@keyframes mpPushModalEntrance{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:500px){.mp-push-onboarding{padding:20px}.mp-push-onboard-buttons{flex-direction:column}.mp-push-onboard-buttons .btn{width:100%}}
+@media(prefers-reduced-motion:reduce){.mp-push-onboarding{animation:none!important}.mp-push-onboarding::backdrop{backdrop-filter:none}}
+</style>
+</head><body>
 <header><div class="top"><div class="brand mp-centered-brand"><span class="logo">✦</span><div class="mp-brand-copy"><span class="mp-main-title">MP Checklist</span><span class="mp-company-track"><small>Malik Polychem Private Limited</small></span></div></div><div class="topright"><span class="pulse"></span><span class="who" id="identity">Secure workspace</span><button class="btn outline small hidden" id="signout" style="color:white;border-color:#ffffff55" onclick="logout()">Sign out</button></div></div></header>
 <div id="auth" class="authpage"><div class="panel authbox"><h1>Welcome back</h1><p class="muted">Sign in using your registered email or admin-assigned mobile number and the same password.</p>
 <div class="field"><label>Email or mobile number</label><input id="loginEmail" type="text" autocomplete="username" placeholder="Work email / 10-digit mobile"></div>
@@ -506,10 +522,10 @@ header::before{animation:mpV17HeaderShine 8s ease-in-out infinite alternate!impo
 <div id="mpPushOptIn" class="mp-push-optin"><hr style="border:0;border-top:1px solid var(--line);margin:22px 0"><h3>Phone Notifications</h3>
 <p class="muted tiny">Each employee must enable notifications on their own phone. Best supported in Chrome or an installed PWA; an Android WebView APK needs a native push upgrade.</p>
 <div class="actions"><button class="btn" id="mpEnablePush" onclick="mpEnablePhonePush()">🔔 Enable notifications on this phone</button><button class="btn light" onclick="mpDisablePhonePush()">Disable</button></div>
-<p class="muted tiny" id="mpPushDeviceStatus">Device registration is ready. Actual push delivery requires activation of the notification server.</p>
+<p class="muted tiny" id="mpPushDeviceStatus">Tap Enable once on your phone. Browser notification permission is required for background reminders.</p>
 </div><div class="hidden" id="reminderSettings"><hr style="border:0;border-top:1px solid var(--line);margin:23px 0"><h3>Employee Task Reminders · Owner Controls</h3>
 <p class="tiny muted">Only the designated owner can change schedules. All times are India Standard Time (AM/PM).</p>
-<div class="mp-settings-info"><b>Delivery setup pending:</b> Times are saved securely in Supabase. Emails and phone notifications will only be delivered after an email provider and device push subscriptions are connected.</div>
+<div class="mp-settings-info"><b>Delivery status:</b> Push reminder dispatcher is scheduled; each phone must opt in once. Email reminders require a verified sender and Brevo API key in Supabase Secrets.</div>
 <label class="mp-setting-switch"><input id="mpEmailEnabled" type="checkbox" checked> Enable daily task email digest</label>
 <div class="mp-time-grid"><div class="field"><label>Email time (IST)</label><select id="mpEmailTime"></select></div></div>
 <label class="mp-setting-switch"><input id="mpPushEnabled" type="checkbox" checked> Enable phone push reminders</label>
@@ -522,6 +538,19 @@ header::before{animation:mpV17HeaderShine 8s ease-in-out infinite alternate!impo
 <p class="muted tiny" id="mpReminderStatus" aria-live="polite"></p>
 <select id="reminderHour" class="hidden" aria-hidden="true"></select></div></div></section>
 </main></div>
+
+<!-- One-tap permission onboarding shown after the employee signs in; never bypasses browser permission. -->
+<dialog id="mpPushOnboarding" class="mp-push-onboarding" aria-labelledby="mpPushOnboardTitle" aria-describedby="mpPushOnboardText">
+  <div class="mp-push-onboard-icon" aria-hidden="true">🔔</div>
+  <h2 id="mpPushOnboardTitle">Enable task reminders</h2>
+  <p id="mpPushOnboardText">Get an MP Checklist notification when today's tasks are still pending at <strong>10:00 AM, 1:30 PM and 5:00 PM</strong> (IST). Times can be changed by the owner.</p>
+  <p class="mp-push-onboard-small">Just once: choose Enable, then tap <strong>Allow</strong> in your browser's permission prompt. You can continue working even if you choose Not now.</p>
+  <div class="mp-push-onboard-buttons">
+    <button type="button" class="btn" id="mpPushOnboardAllow" onclick="mpPushOnboardEnable()">🔔 Enable notifications</button>
+    <button type="button" class="btn light" onclick="mpPushOnboardLater()">Not now</button>
+  </div>
+  <p class="mp-push-onboard-status" id="mpPushOnboardStatus" role="status" aria-live="polite"></p>
+</dialog>
 <div class="toast-stack" id="toastStack" aria-live="polite"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js"></script>
 <script>
@@ -643,12 +672,12 @@ function show(id,on=true){$(id).classList.toggle('hidden',!on)}function htmlSafe
 function note(s,err=false){$('notice').textContent=s;show('notice',!!s);$('notice').classList.toggle('error',err)}function authNote(s,err=false){$('authNotice').textContent=s;show('authNotice',!!s);$('authNotice').classList.toggle('error',err)}
 function call(name,...args){return apiCall(name,...args)}function errorText(e){return e?.message||String(e)}
 function switchSetup(on){show('setupWrap',on);$('loginPassword').parentNode.classList.toggle('hidden',on);$('loginButton').classList.toggle('hidden',on);if(on&&$('loginEmail').value.includes('@'))$('setupEmail').value=$('loginEmail').value;authNote('')}
-async function finishLogin(r){token=r.token;me=r.user;try{const store=$('rememberMe').checked?localStorage:sessionStorage;store.setItem('mpTokenV3',token)}catch(e){}show('auth',false);show('workspace');show('signout');$('identity').textContent=me.name+' · '+me.role.toUpperCase();buildMenu();navigate('dashboard');if(me.role==='admin')await loadDoers()}
+async function finishLogin(r){token=r.token;me=r.user;try{const store=$('rememberMe').checked?localStorage:sessionStorage;store.setItem('mpTokenV3',token)}catch(e){}show('auth',false);show('workspace');show('signout');$('identity').textContent=me.name+' · '+me.role.toUpperCase();buildMenu();navigate('dashboard');setTimeout(()=>window.mpMaybeOfferPush?.(),350);if(me.role==='admin')await loadDoers()}
 async function login(){if(busy)return;busy=true;$('loginButton').disabled=true;try{const r=await call('mpPasswordLogin',$('loginEmail').value.trim(),$('loginPassword').value,$('rememberMe').checked);await finishLogin(r)}catch(e){authNote(errorText(e),true)}finally{busy=false;$('loginButton').disabled=false}}
 async function requestSetupCode(){const email=$('setupEmail').value.toLowerCase().trim();try{$('sendSetupOtp').disabled=true;const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});if(error)throw error;authNote('If registered, a secure password setup link will be sent. Check inbox/spam.');}catch(e){authNote(errorText(e),true)}finally{$('sendSetupOtp').disabled=false}}
 async function completeSetup(){if(busy)return;busy=true;$('setupButton').disabled=true;try{const p=$('setupPassword').value;if(p.length<12||!/[A-Z]/.test(p)||!/[a-z]/.test(p)||!/[0-9]/.test(p))throw Error('Use 12+ characters including upper/lowercase and a number');const {data:{session}}=await sb.auth.getSession();if(!session)throw Error('Open the verification link from your email first.');const {error}=await sb.auth.updateUser({password:p});if(error)throw error;await finishLogin(await loginResult());toast('Password changed successfully')}catch(e){authNote(errorText(e),true)}finally{busy=false;$('setupButton').disabled=false}}
 async function logout(){clearAppCache();try{await call('mpLogout',token)}catch(e){}try{localStorage.removeItem('mpTokenV3');sessionStorage.removeItem('mpTokenV3')}catch(e){}token='';me=null;show('auth');show('workspace',false);show('signout',false)}
-async function restoreLogin(){try{const {data:{session}}=await sb.auth.getSession();if(!session)return;const r=await loginResult();token=r.token;me=r.user;show('auth',false);show('workspace');show('signout');$('identity').textContent=me.name+' · '+me.role.toUpperCase();buildMenu();navigate('dashboard');if(me.role==='admin')await loadDoers();}catch(e){authNote(errorText(e),true)}}
+async function restoreLogin(){try{const {data:{session}}=await sb.auth.getSession();if(!session)return;const r=await loginResult();token=r.token;me=r.user;show('auth',false);show('workspace');show('signout');$('identity').textContent=me.name+' · '+me.role.toUpperCase();buildMenu();navigate('dashboard');setTimeout(()=>window.mpMaybeOfferPush?.(),350);if(me.role==='admin')await loadDoers();}catch(e){authNote(errorText(e),true)}}
 function buildMenu(){ $('navigation').innerHTML=menus[me.role].map(([key,ico,label])=>`<button class="nav" data-nav="${key}" onclick="navigate('${key}')"><span style="font-size:18px">${ico}</span>${label}</button>`).join('');show('holidayForm',me.role!=='employee');show('employeeFilterWrap',me.role==='admin')}
 function navigate(p){if(!menus[me.role].some(x=>x[0]===p))return;currentPage=p;pages.forEach(x=>{show(x,x===p);if(x===p){$(x).classList.remove('view');void $(x).offsetWidth;$(x).classList.add('view')}});document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav===p));$('pageTitle').textContent=menus[me.role].find(x=>x[0]===p)[2];$('pageSub').textContent=p==='dashboard'?'Current-month overview':'MP Checklist · '+me.role;note('');({dashboard:loadDashboard,holidays:loadHolidays,score:loadScore,profile:loadProfile,overdue:loadOverdue,employees:loadDoers,reports:()=>{},tasks:()=>{}}[p])()}
 function refreshCurrent(){clearAppCache();navigate(currentPage)}function laterLoad(){clearTimeout(delay);delay=setTimeout(loadDashboard,350)}function setTaskMode(v){taskMode=v;$('currentBtn').classList.toggle('sel',v==='current');$('previousBtn').classList.toggle('sel',v==='previous');loadDashboard()}
@@ -897,7 +926,7 @@ restoreLogin();
       el('mpEmailEnabled').checked=data.email_enabled;
       el('mpPushEnabled').checked=data.push_enabled;
       wrap.classList.remove('hidden');
-      el('mpReminderStatus').textContent='Schedule loaded securely. Delivery provider connection is still required.';
+      el('mpReminderStatus').textContent='Schedule loaded. Push devices must opt in; emails require Brevo sender credentials.';
     }catch(e){console.error('Reminder settings:',e);el('mpReminderStatus').textContent='Unable to load reminder settings.';}
   };
   window.mpSaveOwnerSchedule=async function(){
@@ -912,7 +941,7 @@ restoreLogin();
         updated_at:new Date().toISOString(),updated_by:user.id};
       const {error}=await sb.from('mp_notification_settings').update(record).eq('id',1);
       if(error)throw error;
-      el('mpReminderStatus').textContent='Timings saved. Email and push delivery still require provider/device setup.';
+      el('mpReminderStatus').textContent='Timings saved. Push requires device permission; email requires configured sender credentials.';
       if(typeof note==='function')note('Reminder timing preferences saved.');
     }catch(e){el('mpReminderStatus').textContent='Save failed: '+(e.message||e);if(typeof note==='function')note(e.message||String(e),true);}
     finally{button.disabled=false;}
@@ -922,7 +951,7 @@ restoreLogin();
 <script id="mp-v14-device-optin">
 (() => {
  'use strict';
- const vapidPublic='BKBe2obyNSRoqP7Q_fMzOuFiGrvmgX93IpoP4BqtqLM7DcjERlj5TDALpUmSpNGntnLIQYzLwT_gRorgzcOX9Vs';
+ const vapidPublic='BDvaPYWb0moXYJUtv-Q5DAq0yC2eoQpkD2ISn079FDsq4Z33K3PttdZMV1g3810Req6CJGy21nEtVXXurpzRipU';
  const status=(message)=>{const e=document.getElementById('mpPushDeviceStatus');if(e)e.textContent=message;};
  const decodeBase64=(s)=>{const pad='='.repeat((4-s.length%4)%4);return Uint8Array.from(atob((s+pad).replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));};
  const getLogin=async()=>{const {data:{user},error}=await sb.auth.getUser();if(error||!user)throw Error('Please sign in before enabling notifications.');return user;};
@@ -930,9 +959,11 @@ restoreLogin();
    const btn=document.getElementById('mpEnablePush');if(btn)btn.disabled=true;
    try{
      if(!window.isSecureContext||!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window))throw Error('Push not supported here. Open MP Checklist in Chrome; the current Android WebView APK may not support it.');
-     const user=await getLogin();
-     const granted=await Notification.requestPermission();
+     // Request permission within the original button-click gesture; await can lose user activation.
+     const permissionRequest=Notification.permission==='granted'?Promise.resolve('granted'):Notification.requestPermission();
+     const granted=await permissionRequest;
      if(granted!=='granted')throw Error('Permission not granted. You can enable notifications in Chrome site settings.');
+     const user=await getLogin();
      const reg=await navigator.serviceWorker.register('./mp-sw.js',{scope:'./'});
      const ready=await navigator.serviceWorker.ready;
      let sub=await ready.pushManager.getSubscription();
@@ -940,8 +971,8 @@ restoreLogin();
      const obj=sub.toJSON();
      const {error}=await sb.from('mp_push_subscriptions').upsert({auth_user_id:user.id,endpoint:obj.endpoint,p256dh:obj.keys?.p256dh,auth_key:obj.keys?.auth},{onConflict:'endpoint'});
      if(error)throw error;
-     status('✅ This phone is subscribed. Scheduled push delivery will work once the server sender is activated.');
-   }catch(e){status('Unable to enable notifications: '+(e.message||String(e)));}
+     status('✅ Notifications enabled on this phone. You will receive scheduled reminders when tasks are pending and the phone supports background push.');return true;
+   }catch(e){status('Unable to enable notifications: '+(e.message||String(e)));return false;}
    finally{if(btn)btn.disabled=false;}
  };
  window.mpDisablePhonePush=async function(){
@@ -950,6 +981,57 @@ restoreLogin();
    status('Notifications disabled on this device.');
   }catch(e){status('Could not disable: '+(e.message||String(e)));}
  };
+})();
+</script>
+
+<script id="mp-v18-onboarding-logic">
+(()=>{
+'use strict';
+const modal=()=>document.getElementById('mpPushOnboarding');
+let offering=false;
+const storageKey=id=>'mpPushIntroV18:'+id;
+const store=(id)=>{try{localStorage.setItem(storageKey(id),'seen')}catch(e){}};
+const getUser=async()=>{const {data:{user},error}=await sb.auth.getUser();if(error||!user)throw Error('Please sign in again.');return user;};
+const supported=()=>window.isSecureContext&&'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window;
+let currentUid='';
+window.mpMaybeOfferPush=async()=>{
+ if(offering || !supported() || document.visibilityState!=='visible')return;
+ try{
+  offering=true;
+  const user=await getUser();
+  currentUid=user.id;
+  if(localStorage.getItem(storageKey(user.id))==='seen')return;
+  if(Notification.permission==='denied'){store(user.id);return;}
+  const reg=await navigator.serviceWorker.getRegistration('./');
+  const sub=await reg?.pushManager.getSubscription();
+  if(sub){
+    const {data:linked,error}=await sb.from('mp_push_subscriptions').select('id').eq('auth_user_id',user.id).eq('endpoint',sub.endpoint).maybeSingle();
+    if(!error && linked){store(user.id);return;}
+  }
+  const dialog=modal();
+  if(!dialog || dialog.open)return;
+  if(typeof dialog.showModal==='function')dialog.showModal();
+ }catch(e){console.info('Push onboarding skipped:',e);}
+ finally{offering=false;}
+};
+window.mpPushOnboardLater=()=>{
+ if(currentUid)store(currentUid);
+ const d=modal();if(d?.open)d.close();
+};
+window.mpPushOnboardEnable=async()=>{
+ const button=document.getElementById('mpPushOnboardAllow'),status=document.getElementById('mpPushOnboardStatus');
+ if(button)button.disabled=true;
+ if(status)status.textContent='Registering this phone…';
+ try{
+   // User's button click initiates the browser permission request; no silent grant.
+   const ok=await window.mpEnablePhonePush();
+   if(!ok){if(status)status.textContent=document.getElementById('mpPushDeviceStatus')?.textContent||'Could not register this phone. Please try again.';return;}
+   if(currentUid)store(currentUid);
+   if(status){status.textContent='✓ Notifications enabled. You can now use MP Checklist.';status.style.color='#236e48';}
+   const d=modal();if(d?.open)d.close();
+ }catch(e){if(status)status.textContent=e?.message||String(e);}
+ finally{if(button)button.disabled=false;}
+};
 })();
 </script>
 </body></html>
