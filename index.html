@@ -384,6 +384,49 @@ main .task:hover{border-left-color:#900a46!important;transform:translateY(-4px)!
 @media(max-width:480px){.mp-command-panel{grid-template-columns:1fr;padding:19px 17px}.mp-progress-gauge{position:absolute;right:10px;top:15px;opacity:.16;width:130px;height:130px;pointer-events:none}.mp-command-main{position:relative;z-index:2}.mp-command-heading{max-width:90%}.mp-quick-filter{padding:7px 10px}.mp-command-panel .mp-progress-rail{margin-top:13px}}
 @media(prefers-reduced-motion:reduce){.mp-command-panel:before,.mp-live-dot,.mp-command-heading span,.mp-progress-fill{animation:none!important}.mp-progress-fill,.mp-gauge-progress{transition:none!important}}
 
+
+/* V14 Mobile stability: remove full-viewport GPU animation and repaint storms.
+   Desktop premium effects are retained. */
+@media (max-width: 900px), (hover: none) and (pointer: coarse) {
+  html {scroll-behavior:auto!important;}
+  body {background:#fcf7f9!important;background-attachment:scroll!important;overscroll-behavior-y:contain;}
+  body::before,body::after,header::before,header::after,main::before,main::after {
+    animation:none!important;filter:none!important;backdrop-filter:none!important;
+  }
+  body::before,body::after,header::before,header::after{display:none!important;}
+  *,*::before,*::after {animation:none!important;transition-duration:.08s!important;will-change:auto!important;}
+  .view,.panel,.metric,.task,.nav,.tabs button {transform:none!important;filter:none!important;backdrop-filter:none!important;perspective:none!important;}
+  .view {animation:none!important;}
+  .panel,.metric,.task {box-shadow:0 2px 12px rgba(103,33,60,.065)!important;}
+  .panel:hover,.metric:hover,.task:hover {transform:none!important;}
+  .mp-tracing-border,.stroke-frame,.mp-v10-ripple{display:none!important;}
+  .metric .draw-number strong {opacity:1!important;transform:none!important;filter:none!important;}
+  .metric .draw-number svg{display:none!important;}
+  .brand .mp-company-track small{animation:none!important;transform:none!important;position:static!important;}
+  .mp-company-track{overflow:visible!important;}
+  #navigation .nav.active{box-shadow:inset 3px 0 #780c39!important;border:1px solid #dc90af!important;}
+  .tabs button.sel{outline:1px solid #b73063;outline-offset:0;}
+  .shell {min-width:0;}
+  main{min-width:0;overflow-x:clip;}
+  .panel,.task,.metric{contain:none!important;}
+}
+@media (max-width: 530px){
+  .metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  .metric{min-width:0!important;}
+  .formgrid,.formgrid.two{grid-template-columns:minmax(0,1fr)!important;}
+  .actions{flex-wrap:wrap!important;}
+  #reminderSettings .mp-time-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+}
+.mp-time-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:650px;}
+.mp-time-grid .field{min-width:0;}
+.mp-time-grid select{width:100%;}
+.mp-settings-info{padding:12px 14px;border-radius:12px;background:#fff2f6;border:1px solid #ecd5dd;color:#6c2744;margin:12px 0;font-size:13px;}
+.mp-setting-switch{display:flex;gap:8px;align-items:center;margin:8px 0;font-weight:650;}
+.mp-setting-switch input{width:19px;height:19px;}
+
+.mp-push-optin{margin:20px 0 0}.mp-push-optin .actions{display:flex;flex-wrap:wrap;gap:10px}
+.mp-push-optin button{max-width:100%}
+@media(max-width:600px){.mp-push-optin .actions button{width:100%}}
 </style></head><body>
 <header><div class="top"><div class="brand mp-centered-brand"><span class="logo">✦</span><div class="mp-brand-copy"><span class="mp-main-title">MP Checklist</span><span class="mp-company-track"><small>Malik Polychem Private Limited</small></span></div></div><div class="topright"><span class="pulse"></span><span class="who" id="identity">Secure workspace</span><button class="btn outline small hidden" id="signout" style="color:white;border-color:#ffffff55" onclick="logout()">Sign out</button></div></div></header>
 <div id="auth" class="authpage"><div class="panel authbox"><h1>Welcome back</h1><p class="muted">Sign in with your registered email or mobile number and password.</p>
@@ -416,7 +459,25 @@ main .task:hover{border-left-color:#900a46!important;transform:translateY(-4px)!
 <section id="score" class="view hidden"><div class="panel"><h2>My score · Current month</h2><div class="score" id="scoreValue">—</div><span class="scorelabel">out of 100 · Tasks due up to today</span><div class="progress"><i id="scoreBar" style="width:0%"></i></div><div id="scoreDetails" class="tiny muted"></div><p class="tiny muted">Score formula for app: on-time completed ÷ tasks due through today × 100. This is a new app metric; it does not overwrite the existing Scores tab formulas.</p></div></section>
 <section id="reports" class="view hidden"><div class="panel"><h2>Employee performance report</h2><div class="formgrid"><div class="field"><label>Employee</label><select id="reportEmployee"></select></div><div class="field"><label>From date</label><input type="date" id="reportFrom"></div><div class="field"><label>To date</label><input type="date" id="reportTo"></div></div><div class="actions"><button class="btn" id="generateReportBtn" onclick="runReport()">Generate report</button><button class="btn light hidden" id="exportReportBtn" onclick="exportReport()">↓ Export CSV (all rows)</button></div><p id="reportProgress" class="tiny muted" aria-live="polite"></p><div id="reportResult"></div></div></section>
 <section id="overdue" class="view hidden"><div class="panel"><h2>Employee overdue tasks</h2><p class="muted tiny">All incomplete tasks planned before today.</p><div id="overdueItems"></div></div></section>
-<section id="profile" class="view hidden"><div class="panel"><h2>My profile</h2><div id="profileItems"></div><div class="hidden" id="reminderSettings"><hr style="border:0;border-top:1px solid var(--line);margin:23px 0"><h3>Daily email reminder schedule</h3><p class="tiny muted">Only the designated owner can change this hour. Scheduled emails include today's pending and yesterday's incomplete tasks.</p><div class="formgrid two"><div class="field"><label>Reminder hour (India time)</label><select id="reminderHour"></select></div><div class="field"><label>Save</label><button class="btn" onclick="saveTime()">Update schedule</button></div></div></div></div></section>
+<section id="profile" class="view hidden"><div class="panel"><h2>My profile</h2><div id="profileItems"></div>
+<div id="mpPushOptIn" class="mp-push-optin"><hr style="border:0;border-top:1px solid var(--line);margin:22px 0"><h3>Phone Notifications</h3>
+<p class="muted tiny">Each employee must enable notifications on their own phone. Best supported in Chrome or an installed PWA; an Android WebView APK needs a native push upgrade.</p>
+<div class="actions"><button class="btn" id="mpEnablePush" onclick="mpEnablePhonePush()">🔔 Enable notifications on this phone</button><button class="btn light" onclick="mpDisablePhonePush()">Disable</button></div>
+<p class="muted tiny" id="mpPushDeviceStatus">Device registration is ready. Actual push delivery requires activation of the notification server.</p>
+</div><div class="hidden" id="reminderSettings"><hr style="border:0;border-top:1px solid var(--line);margin:23px 0"><h3>Employee Task Reminders · Owner Controls</h3>
+<p class="tiny muted">Only the designated owner can change schedules. All times are India Standard Time (AM/PM).</p>
+<div class="mp-settings-info"><b>Delivery setup pending:</b> Times are saved securely in Supabase. Emails and phone notifications will only be delivered after an email provider and device push subscriptions are connected.</div>
+<label class="mp-setting-switch"><input id="mpEmailEnabled" type="checkbox" checked> Enable daily task email digest</label>
+<div class="mp-time-grid"><div class="field"><label>Email time (IST)</label><select id="mpEmailTime"></select></div></div>
+<label class="mp-setting-switch"><input id="mpPushEnabled" type="checkbox" checked> Enable phone push reminders</label>
+<div class="mp-time-grid">
+<div class="field"><label>Push reminder 1</label><select id="mpPushTime1"></select></div>
+<div class="field"><label>Push reminder 2</label><select id="mpPushTime2"></select></div>
+<div class="field"><label>Push reminder 3</label><select id="mpPushTime3"></select></div>
+</div>
+<div class="actions" style="margin-top:15px"><button class="btn" id="mpSaveReminderBtn" onclick="mpSaveOwnerSchedule()">Save reminder timings</button></div>
+<p class="muted tiny" id="mpReminderStatus" aria-live="polite"></p>
+<select id="reminderHour" class="hidden" aria-hidden="true"></select></div></div></section>
 </main></div>
 <div class="toast-stack" id="toastStack" aria-live="polite"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js"></script>
@@ -617,7 +678,7 @@ function csvSafe(v){const s=String(v==null?'':v);return '"'+(/^[\s]*[=+@\-]/.tes
 async function exportReport(){if(!lastReportCriteria)return;const btn=$('exportReportBtn');if(btn.disabled)return;btn.disabled=true;btn.textContent='Preparing export…';try{const data=await call('mpReportExport',token,lastReportCriteria);const header=['Task ID','Employee','Department','Task','Frequency','Planned Date','Actual Date','Result'];const rows=data.rows.map(r=>[r.id,r.name,r.department,r.task,r.frequency,displayDate(r.planned),displayDate(r.actual),r.result]);const csv='\ufeff'+[header,...rows].map(row=>row.map(csvSafe).join(',')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`MP_Checklist_Report_${lastReportCriteria.from}_${lastReportCriteria.to}.csv`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);$('reportProgress').textContent=`Export created: ${data.rows.length} rows. If your mobile browser blocks the download, open the app in Chrome.`}catch(e){note(errorText(e),true)}finally{btn.disabled=false;btn.textContent='↓ Export CSV (all rows)'}}
 function makeTable(items){return `<div class="tablewrap"><table><thead><tr><th>Task ID</th><th>Task</th><th>Planned</th><th>Actual</th><th>Result</th></tr></thead><tbody>${items.map(t=>`<tr><td>${htmlSafe(t.id)}</td><td>${htmlSafe(t.task)}</td><td>${htmlSafe(displayDate(t.planned))}</td><td>${htmlSafe(t.actual?displayDate(t.actual):'—')}</td><td>${t.isDone?(t.actual<=t.planned?'On time':'Late'):(t.planned>new Date().toISOString().slice(0,10)?'Scheduled':'Not completed')}</td></tr>`).join('')}</tbody></table></div>`}
 async function loadOverdue(){try{const r=await call('mpEmployeeOverdue',token,{});$('overdueItems').innerHTML=`<p class="muted tiny">${r.total} overdue task(s) · ${r.limited?'First 500 shown':'All shown'}</p>`+makeTable(r.items)}catch(e){note(errorText(e),true)}}
-async function loadProfile(){try{const p=await call('mpGetProfile',token);$('profileItems').innerHTML=`<div class="profile-hero"><div class="profile-avatar">${htmlSafe((p.name||'?').split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase())}</div><div><h2>${htmlSafe(p.name)}</h2><p>${htmlSafe(p.department)} · ${htmlSafe(p.role.toUpperCase())}</p></div></div><div class="profile-details">${[['Full name',p.name],['Work email',p.email],['Mobile',p.phone||'Not linked'],['Department',p.department],['Access role',p.role.toUpperCase()],['Account status',p.accountStatus||'Active'],['Password setup',p.passwordConfigured?'Configured':'Not configured']].map(x=>`<div class="detail"><small>${htmlSafe(x[0])}</small><strong>${htmlSafe(x[1])}</strong></div>`).join('')}</div><p class="tiny muted" style="margin:19px 0 0">Details are read from your registered employee record. Contact an Admin for name, department or email changes. Mobile number is linked during verified password setup.</p>`;if(p.role==='admin'){const r=await call('mpGetSettings',token);show('reminderSettings',r.canEdit);$('reminderHour').innerHTML=Array.from({length:24},(_,h)=>`<option value="${h}" ${r.hour===h?'selected':''}>${String(h).padStart(2,'0')}:00</option>`).join('');}}catch(e){note(errorText(e),true)}}
+async function loadProfile(){try{const p=await call('mpGetProfile',token);$('profileItems').innerHTML=`<div class="profile-hero"><div class="profile-avatar">${htmlSafe((p.name||'?').split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase())}</div><div><h2>${htmlSafe(p.name)}</h2><p>${htmlSafe(p.department)} · ${htmlSafe(p.role.toUpperCase())}</p></div></div><div class="profile-details">${[['Full name',p.name],['Work email',p.email],['Mobile',p.phone||'Not linked'],['Department',p.department],['Access role',p.role.toUpperCase()],['Account status',p.accountStatus||'Active'],['Password setup',p.passwordConfigured?'Configured':'Not configured']].map(x=>`<div class="detail"><small>${htmlSafe(x[0])}</small><strong>${htmlSafe(x[1])}</strong></div>`).join('')}</div><p class="tiny muted" style="margin:19px 0 0">Details are read from your registered employee record. Contact an Admin for name, department or email changes. Mobile number is linked during verified password setup.</p>`;if(p.role==='admin'){await mpLoadOwnerSchedule(p.email);}}catch(e){note(errorText(e),true)}}
 async function saveTime(){try{const r=await call('mpSaveReminderHour',token,Number($('reminderHour').value));note('New reminder hour: '+String(r.hour).padStart(2,'0')+':00 (approximately).');}catch(e){note(errorText(e),true)}}
 
 enhanceDateInputs();
@@ -631,6 +692,7 @@ restoreLogin();
   const selector='#navigation .nav, .tabs button, button.toggle';
   const isSelected=el=>el.matches('#navigation .nav.active, .tabs button.sel, button.toggle.active');
   function syncTracers(){
+    if(window.matchMedia('(max-width:900px), (hover:none) and (pointer:coarse)').matches)return;
     document.querySelectorAll(selector).forEach(el=>{
       const existing=el.querySelector(':scope > svg.mp-tracing-border');
       if(!isSelected(el)) { if(existing) existing.remove(); return; }
@@ -723,6 +785,91 @@ restoreLogin();
    if(event.target?.id!=='taskFilter')return;
    document.querySelectorAll('[data-mp-filter]').forEach(b=>b.classList.toggle('mp-quick-active',b.dataset.mpFilter===event.target.value));
  });
+})();
+</script>
+<script id="mp-v14-owner-schedule">
+/* Separate authorized settings feature; email/push delivery requires external sender setup. */
+(function(){
+  'use strict';
+  const owner='mis.malikpolychem@gmail.com';
+  const el=id=>document.getElementById(id);
+  const fmt=t=>{
+    const [h,m]=String(t||'00:00').slice(0,5).split(':').map(Number);
+    return `${String(h%12||12).padStart(2,'0')}:${String(m).padStart(2,'0')} ${h>=12?'PM':'AM'}`;
+  };
+  const timeOptions=()=>{
+    const out=[];for(let h=0;h<24;h++)for(let m=0;m<60;m+=15){
+      const value=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+      out.push(`<option value="${value}">${fmt(value)}</option>`);
+    }return out.join('');
+  };
+  window.mpLoadOwnerSchedule=async function(email){
+    const wrap=el('reminderSettings');
+    wrap.classList.add('hidden');
+    if(String(email||'').toLowerCase()!==owner)return;
+    try{
+      const {data,error}=await sb.from('mp_notification_settings').select('*').eq('id',1).single();
+      if(error)throw error;
+      const fieldIds=['mpEmailTime','mpPushTime1','mpPushTime2','mpPushTime3'];
+      fieldIds.forEach(id=>el(id).innerHTML=timeOptions());
+      const vals=[data.email_time,data.push_time_1,data.push_time_2,data.push_time_3];
+      fieldIds.forEach((id,i)=>el(id).value=String(vals[i]).slice(0,5));
+      el('mpEmailEnabled').checked=data.email_enabled;
+      el('mpPushEnabled').checked=data.push_enabled;
+      wrap.classList.remove('hidden');
+      el('mpReminderStatus').textContent='Schedule loaded securely. Delivery provider connection is still required.';
+    }catch(e){console.error('Reminder settings:',e);el('mpReminderStatus').textContent='Unable to load reminder settings.';}
+  };
+  window.mpSaveOwnerSchedule=async function(){
+    const button=el('mpSaveReminderBtn');button.disabled=true;
+    try{
+      const {data:{user},error:authError}=await sb.auth.getUser();
+      if(authError)throw authError;
+      if(!user || user.email?.toLowerCase()!==owner)throw Error('Only the designated owner can change timings.');
+      const record={email_enabled:el('mpEmailEnabled').checked,push_enabled:el('mpPushEnabled').checked,
+        email_time:el('mpEmailTime').value,push_time_1:el('mpPushTime1').value,
+        push_time_2:el('mpPushTime2').value,push_time_3:el('mpPushTime3').value,
+        updated_at:new Date().toISOString(),updated_by:user.id};
+      const {error}=await sb.from('mp_notification_settings').update(record).eq('id',1);
+      if(error)throw error;
+      el('mpReminderStatus').textContent='Timings saved. Email and push delivery still require provider/device setup.';
+      if(typeof note==='function')note('Reminder timing preferences saved.');
+    }catch(e){el('mpReminderStatus').textContent='Save failed: '+(e.message||e);if(typeof note==='function')note(e.message||String(e),true);}
+    finally{button.disabled=false;}
+  };
+})();
+</script>
+<script id="mp-v14-device-optin">
+(() => {
+ 'use strict';
+ const vapidPublic='BKBe2obyNSRoqP7Q_fMzOuFiGrvmgX93IpoP4BqtqLM7DcjERlj5TDALpUmSpNGntnLIQYzLwT_gRorgzcOX9Vs';
+ const status=(message)=>{const e=document.getElementById('mpPushDeviceStatus');if(e)e.textContent=message;};
+ const decodeBase64=(s)=>{const pad='='.repeat((4-s.length%4)%4);return Uint8Array.from(atob((s+pad).replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));};
+ const getLogin=async()=>{const {data:{user},error}=await sb.auth.getUser();if(error||!user)throw Error('Please sign in before enabling notifications.');return user;};
+ window.mpEnablePhonePush=async function(){
+   const btn=document.getElementById('mpEnablePush');if(btn)btn.disabled=true;
+   try{
+     if(!window.isSecureContext||!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window))throw Error('Push not supported here. Open MP Checklist in Chrome; the current Android WebView APK may not support it.');
+     const user=await getLogin();
+     const granted=await Notification.requestPermission();
+     if(granted!=='granted')throw Error('Permission not granted. You can enable notifications in Chrome site settings.');
+     const reg=await navigator.serviceWorker.register('./mp-sw.js',{scope:'./'});
+     const ready=await navigator.serviceWorker.ready;
+     let sub=await ready.pushManager.getSubscription();
+     if(!sub)sub=await ready.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:decodeBase64(vapidPublic)});
+     const obj=sub.toJSON();
+     const {error}=await sb.from('mp_push_subscriptions').upsert({auth_user_id:user.id,endpoint:obj.endpoint,p256dh:obj.keys?.p256dh,auth_key:obj.keys?.auth},{onConflict:'endpoint'});
+     if(error)throw error;
+     status('✅ This phone is subscribed. Scheduled push delivery will work once the server sender is activated.');
+   }catch(e){status('Unable to enable notifications: '+(e.message||String(e)));}
+   finally{if(btn)btn.disabled=false;}
+ };
+ window.mpDisablePhonePush=async function(){
+  try{const user=await getLogin();const reg=await navigator.serviceWorker.getRegistration('./');const sub=await reg?.pushManager.getSubscription();
+   if(sub){const {error}=await sb.from('mp_push_subscriptions').delete().eq('auth_user_id',user.id).eq('endpoint',sub.endpoint);if(error)throw error;await sub.unsubscribe();}
+   status('Notifications disabled on this device.');
+  }catch(e){status('Could not disable: '+(e.message||String(e)));}
+ };
 })();
 </script>
 </body></html>
