@@ -560,6 +560,12 @@ header::before{animation:mpV17HeaderShine 8s ease-in-out infinite alternate!impo
 @media(max-width:410px){#mpCommandPanel .mp-hero-pills .mp-hero-pill:nth-child(1){display:none;}}
 @media(prefers-reduced-motion:reduce){#mpCommandPanel .mp-hero-copy::after{animation:none;}#mpCommandPanel .mp-hero-pill{transition:none;}}
 </style>
+<style id="mp-v28-navigation-visibility-fix">
+/* The V27 dashboard display:flex!important rule overrode .hidden on tab changes.
+   Give the hidden state higher specificity so only the selected page renders. */
+#workspace #dashboard.hidden { display:none!important; }
+#workspace main > section.view.hidden { display:none!important; }
+</style>
 </head><body>
 <header><div class="top"><div class="brand mp-centered-brand"><span class="logo">✦</span><div class="mp-brand-copy"><span class="mp-main-title">MP Checklist</span><span class="mp-company-track"><small>Malik Polychem Private Limited</small></span></div></div><div class="topright"><span class="pulse"></span><span class="who" id="identity">Secure workspace</span><button class="btn outline small hidden" id="signout" style="color:white;border-color:#ffffff55" onclick="logout()">Sign out</button></div></div></header>
 <div id="auth" class="authpage"><div class="panel authbox"><h1>Welcome back</h1><p class="muted">Sign in using your registered email or admin-assigned mobile number and the same password.</p>
