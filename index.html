@@ -506,36 +506,122 @@ header::before{animation:mpV17HeaderShine 8s ease-in-out infinite alternate!impo
 </style>
 
 <style id="mp-v24-score-layout-stable">
-/* Keep dashboard children in the same main-column flow and stop the unexpected blank space and left overhang. */
+/* V25 layout repair: keep hero, cards and task panel on the SAME aligned content track. */
 #workspace.shell { grid-template-columns:215px minmax(0,1fr); }
-#workspace.shell > main { width:100%;max-width:100%;min-width:0;box-sizing:border-box;overflow-x:clip; }
-#workspace #dashboard { display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:15px!important;width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;margin:0!important;padding:0!important; }
-#workspace #dashboard > * { min-width:0!important;box-sizing:border-box!important; }
-#workspace #dashboard #mpCommandPanel { position:relative!important;display:grid!important;grid-template-columns:minmax(0,1fr) 154px!important;align-items:center!important;column-gap:24px!important;width:100%!important;min-height:248px!important;height:auto!important;padding:24px 32px!important;margin:0!important;overflow:hidden!important;isolation:isolate;box-sizing:border-box!important;background:radial-gradient(ellipse at 85% 30%,#ad356a6b,transparent 62%),linear-gradient(115deg,#4d0626,#870f44 60%,#9c2357)!important; }
+#workspace.shell > main { width:100%; max-width:100%; min-width:0; box-sizing:border-box; overflow-x:hidden; padding:22px 26px 56px!important; }
+#workspace #dashboard {
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  gap:16px!important;
+  width:100%!important;
+  max-width:1120px!important;
+  min-width:0!important;
+  margin:0 auto!important;
+  padding:0!important;
+  box-sizing:border-box!important;
+  align-content:start!important;
+}
+#workspace #dashboard > * {
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  margin:0!important;
+  justify-self:stretch!important;
+  align-self:start!important;
+}
+#workspace #dashboard #mpCommandPanel {
+  position:relative!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 154px!important;
+  align-items:center!important;
+  column-gap:24px!important;
+  width:100%!important;
+  min-height:232px!important;
+  height:auto!important;
+  padding:24px 28px!important;
+  overflow:hidden!important;
+  isolation:isolate;
+  background:radial-gradient(ellipse at 85% 30%,#ad356a6b,transparent 62%),linear-gradient(115deg,#4d0626,#870f44 60%,#9c2357)!important;
+}
 #mpCommandPanel .mp-command-main,#mpCommandPanel .mp-command-eyebrow,#mpCommandPanel .mp-progress-rail,#mpCommandPanel #mpProgressCaption {display:none!important;}
-#mpCommandPanel #mpMoodBanner.mp-gif-banner { grid-column:1!important;grid-row:1!important;display:flex!important;align-items:center!important;gap:26px!important;justify-content:flex-start!important;width:100%!important;min-width:0!important;min-height:198px!important;padding:0!important;margin:0!important;background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible!important;position:relative!important;z-index:3!important; }
-#mpCommandPanel .mp-score-gif-frame { flex:0 0 212px!important;width:212px!important;height:188px!important;min-width:0!important;max-height:none!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;overflow:hidden!important;display:flex!important;align-items:center!important;justify-content:center!important; }
-#mpCommandPanel .mp-score-gif-frame img { width:100%!important;height:100%!important;object-fit:contain!important;mix-blend-mode:normal!important;background:transparent!important;filter:drop-shadow(0 8px 10px #2b061b45); }
-#mpCommandPanel #mpMoodMessage.mp-score-message{color:#fff!important;font-size:clamp(20px,2.4vw,30px)!important;line-height:1.22!important;font-weight:850!important;text-shadow:0 2px 12px #38082355;flex:1!important;min-width:0!important;max-width:460px!important;}
-/* A single ring: SVG and percentage are stacked in the SAME 154x154 frame. */
-#mpCommandPanel .mp-progress-gauge{ grid-column:2!important;grid-row:1!important;position:relative!important;top:auto!important;right:auto!important;left:auto!important;bottom:auto!important;justify-self:center!important;flex:none!important;margin:0!important;width:154px!important;height:154px!important;min-width:154px!important;opacity:1!important;z-index:5!important;transform:none!important;isolation:isolate; }
-#mpCommandPanel .mp-progress-gauge>svg{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;transform:rotate(-90deg)!important;}
-#mpCommandPanel .mp-progress-gauge .mp-gauge-legend{position:absolute!important;inset:0!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-direction:column!important;z-index:6!important;transform:none!important;gap:2px!important;}
-#mpCommandPanel .mp-gauge-legend strong{display:block!important;position:static!important;transform:none;font-size:35px!important;letter-spacing:-1px!important;line-height:1.1!important;white-space:nowrap!important;color:#fff!important;text-align:center!important;}
-#mpCommandPanel .mp-gauge-legend small{display:block!important;position:static!important;font-size:9px!important;line-height:1.2!important;white-space:nowrap!important;letter-spacing:.12em!important;}
-#workspace #dashboard > #metrics{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important;position:relative!important;inset:auto!important;transform:none!important;width:100%!important;max-width:100%!important;min-width:0!important;margin:0!important;padding:0!important;align-self:stretch!important;justify-self:stretch!important;}
-#workspace #dashboard > #metrics>.metric{width:auto!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important;}
-#workspace #dashboard > .panel{position:relative!important;inset:auto!important;transform:none;width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;margin:0!important;}
-#mpCommandPanel #mpScoreFireworks.mp-score-fireworks{position:absolute!important;inset:0!important;z-index:0!important;pointer-events:none;overflow:hidden;mix-blend-mode:screen;filter:saturate(.85);opacity:0;}
-#mpCommandPanel #mpScoreFireworks.mp-score-fireworks.active{animation:mpV24Fireworks3 4.2s linear 1 forwards!important;visibility:visible!important;}
-#mpCommandPanel #mpScoreFireworks.mp-score-fireworks img{width:100%;height:100%;object-fit:cover;mix-blend-mode:screen;opacity:.65;filter:saturate(.88);}
+#mpCommandPanel #mpMoodBanner.mp-gif-banner {
+  grid-column:1!important; grid-row:1!important;
+  display:flex!important; align-items:center!important; justify-content:flex-start!important;
+  gap:22px!important; width:100%!important; min-width:0!important; min-height:160px!important;
+  padding:0!important; background:transparent!important; border:0!important; box-shadow:none!important;
+  overflow:visible!important; position:relative!important; z-index:3!important;
+}
+#mpCommandPanel .mp-score-gif-frame {
+  flex:0 0 188px!important; width:188px!important; height:168px!important;
+  min-width:0!important; background:transparent!important; border:0!important; border-radius:0!important;
+  box-shadow:none!important; overflow:hidden!important; display:flex!important; align-items:center!important; justify-content:center!important;
+}
+#mpCommandPanel .mp-score-gif-frame img {
+  width:100%!important; height:100%!important; object-fit:contain!important; mix-blend-mode:normal!important; background:transparent!important;
+  filter:drop-shadow(0 8px 10px #2b061b45);
+}
+#mpCommandPanel #mpMoodMessage.mp-score-message {
+  color:#fff!important; font-size:clamp(21px,2.35vw,29px)!important; line-height:1.2!important; font-weight:850!important;
+  text-shadow:0 2px 12px #38082355; flex:1!important; min-width:0!important; max-width:460px!important; margin:0!important;
+}
+#mpCommandPanel .mp-progress-gauge {
+  grid-column:2!important; grid-row:1!important; position:relative!important; top:auto!important; right:auto!important; left:auto!important; bottom:auto!important;
+  justify-self:center!important; align-self:center!important; flex:none!important; margin:0!important;
+  width:154px!important; height:154px!important; min-width:154px!important; opacity:1!important; z-index:5!important; transform:none!important;
+}
+#mpCommandPanel .mp-progress-gauge>svg{position:absolute!important; inset:0!important; display:block!important; width:100%!important; height:100%!important; transform:rotate(-90deg)!important;}
+#mpCommandPanel .mp-progress-gauge .mp-gauge-legend{position:absolute!important; inset:0!important; display:flex!important; align-items:center!important; justify-content:center!important; flex-direction:column!important; z-index:6!important; gap:2px!important;}
+#mpCommandPanel .mp-gauge-legend strong{display:block!important; position:static!important; font-size:35px!important; letter-spacing:-1px!important; line-height:1.1!important; white-space:nowrap!important; color:#fff!important; text-align:center!important;}
+#mpCommandPanel .mp-gauge-legend small{display:block!important; position:static!important; font-size:9px!important; line-height:1.2!important; white-space:nowrap!important; letter-spacing:.12em!important; color:#fff!important; text-align:center!important;}
+#workspace #dashboard > #metrics {
+  display:grid!important; grid-template-columns:repeat(4,minmax(0,1fr))!important; gap:12px!important;
+  width:100%!important; max-width:100%!important; min-width:0!important; margin:0!important; padding:0!important;
+  position:relative!important; inset:auto!important; transform:none!important;
+}
+#workspace #dashboard > #metrics > .metric {
+  width:100%!important; min-width:0!important; max-width:100%!important; margin:0!important; box-sizing:border-box!important;
+}
+#workspace #dashboard > .panel {
+  position:relative!important; inset:auto!important; transform:none!important; width:100%!important; max-width:100%!important; min-width:0!important;
+  margin:0!important; box-sizing:border-box!important;
+}
+#mpCommandPanel #mpScoreFireworks.mp-score-fireworks{position:absolute!important; inset:0!important; z-index:0!important; pointer-events:none; overflow:hidden; mix-blend-mode:screen; filter:saturate(.85); opacity:0;}
+#mpCommandPanel #mpScoreFireworks.mp-score-fireworks.active{animation:mpV24Fireworks3 4.2s linear 1 forwards!important; visibility:visible!important;}
+#mpCommandPanel #mpScoreFireworks.mp-score-fireworks img{width:100%; height:100%; object-fit:cover; mix-blend-mode:screen; opacity:.65; filter:saturate(.88);}
 #mpCommandPanel::before,#mpCommandPanel::after{z-index:-1!important;}
 @keyframes mpV24Fireworks3{0%,5%,27%,37%,58%,68%,93%,100%{opacity:0}10%,21%,43%,53%,74%,85%{opacity:.18}}
-@media(max-width:1100px){#workspace #dashboard #mpCommandPanel{padding:20px!important;grid-template-columns:minmax(0,1fr) 130px!important;gap:10px!important;min-height:220px!important}#mpCommandPanel .mp-score-gif-frame{flex-basis:150px!important;width:150px!important;height:157px!important}#mpCommandPanel #mpMoodBanner.mp-gif-banner{gap:14px!important}#mpCommandPanel .mp-progress-gauge{min-width:130px!important;width:130px!important;height:130px!important}#mpCommandPanel .mp-gauge-legend strong{font-size:30px!important}}
-@media(max-width:850px){#workspace.shell{display:block!important}#workspace.shell > main{padding:18px 14px 50px!important}#workspace #dashboard > #metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important;}}
-@media(max-width:550px){#workspace #dashboard #mpCommandPanel{padding:15px!important;grid-template-columns:minmax(0,1fr) 94px!important;min-height:174px!important;gap:8px!important}#mpCommandPanel .mp-score-gif-frame{flex-basis:96px!important;width:96px!important;height:127px!important}#mpCommandPanel #mpMoodBanner.mp-gif-banner{min-height:130px!important;gap:6px!important}#mpCommandPanel #mpMoodMessage.mp-score-message{font-size:16px!important}#mpCommandPanel .mp-progress-gauge{min-width:94px!important;width:94px!important;height:94px!important}#mpCommandPanel .mp-gauge-legend strong{font-size:22px!important}#mpCommandPanel .mp-gauge-legend small{font-size:6.5px!important;letter-spacing:.03em!important}}
-@media(max-width:360px){#workspace #dashboard #mpCommandPanel{grid-template-columns:minmax(0,1fr) 80px!important}#mpCommandPanel .mp-score-gif-frame{flex-basis:78px!important;width:78px!important;height:110px!important}#mpCommandPanel .mp-progress-gauge{min-width:80px!important;width:80px!important;height:80px!important}#mpCommandPanel .mp-gauge-legend strong{font-size:19px!important}}
-@media(prefers-reduced-motion:reduce){#mpCommandPanel #mpScoreFireworks.mp-score-fireworks.active{animation:none!important;opacity:0!important;}}
+@media(max-width:1100px){
+  #workspace.shell > main{padding:20px 18px 52px!important}
+  #workspace #dashboard{max-width:100%!important}
+  #workspace #dashboard #mpCommandPanel{padding:20px!important; grid-template-columns:minmax(0,1fr) 130px!important; gap:12px!important; min-height:210px!important}
+  #mpCommandPanel .mp-score-gif-frame{flex-basis:146px!important; width:146px!important; height:146px!important}
+  #mpCommandPanel #mpMoodBanner.mp-gif-banner{gap:14px!important; min-height:146px!important}
+  #mpCommandPanel .mp-progress-gauge{min-width:130px!important; width:130px!important; height:130px!important}
+  #mpCommandPanel .mp-gauge-legend strong{font-size:30px!important}
+}
+@media(max-width:850px){
+  #workspace.shell{display:block!important}
+  #workspace.shell > main{padding:18px 14px 48px!important}
+  #workspace #dashboard{max-width:100%!important; gap:14px!important}
+  #workspace #dashboard > #metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:550px){
+  #workspace #dashboard #mpCommandPanel{padding:15px!important; grid-template-columns:minmax(0,1fr) 94px!important; min-height:170px!important; gap:8px!important}
+  #mpCommandPanel .mp-score-gif-frame{flex-basis:90px!important; width:90px!important; height:112px!important}
+  #mpCommandPanel #mpMoodBanner.mp-gif-banner{min-height:122px!important; gap:8px!important}
+  #mpCommandPanel #mpMoodMessage.mp-score-message{font-size:16px!important}
+  #mpCommandPanel .mp-progress-gauge{min-width:94px!important; width:94px!important; height:94px!important}
+  #mpCommandPanel .mp-gauge-legend strong{font-size:22px!important}
+  #mpCommandPanel .mp-gauge-legend small{font-size:6.5px!important; letter-spacing:.03em!important}
+}
+@media(max-width:360px){
+  #workspace #dashboard #mpCommandPanel{grid-template-columns:minmax(0,1fr) 80px!important}
+  #mpCommandPanel .mp-score-gif-frame{flex-basis:76px!important; width:76px!important; height:96px!important}
+  #mpCommandPanel .mp-progress-gauge{min-width:80px!important; width:80px!important; height:80px!important}
+  #mpCommandPanel .mp-gauge-legend strong{font-size:19px!important}
+}
+@media(prefers-reduced-motion:reduce){#mpCommandPanel #mpScoreFireworks.mp-score-fireworks.active{animation:none!important; opacity:0!important;}}
 </style>
 </head><body>
 <header><div class="top"><div class="brand mp-centered-brand"><span class="logo">✦</span><div class="mp-brand-copy"><span class="mp-main-title">MP Checklist</span><span class="mp-company-track"><small>Malik Polychem Private Limited</small></span></div></div><div class="topright"><span class="pulse"></span><span class="who" id="identity">Secure workspace</span><button class="btn outline small hidden" id="signout" style="color:white;border-color:#ffffff55" onclick="logout()">Sign out</button></div></div></header>
